@@ -11,8 +11,12 @@ function BookShelf({ books }) {
         const coverURL = `https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`;
 
         return (
-          <div key={book.cover_id}>
-            <img src={coverURL} alt={book.title} />
+          <div key={book.cover_id}
+          className="transition-all duration-300 hover:scale-105 hover:-rotate-2 hover:shadow-lg"
+          >
+            <img src={coverURL} 
+            alt={book.title}
+            className="rounded-md" />
             <p>{book.title}</p>
           </div>
         );
