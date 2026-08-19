@@ -42,7 +42,7 @@ function App() {
     <p className="text-lg text-gray-500 mb-8">Welcome to Read My Mood!</p>
 </header>
 
-<main className="space-y-8"></main>
+<main className="space-y-8">
     <MoodPicker mood={mood} setMood={setMood} />
     <ComfortMeter comfortLevel={comfortLevel} setComfortLevel={setComfortLevel} />
     {loading && <p className="text-lg text-gray-500">Fetching your books...</p>}
@@ -52,7 +52,9 @@ function App() {
         <BookShelf books={books} />
       </section>
     )}
+    </main>
   </div>
 );
 }
+
 export default App;
