@@ -1,10 +1,9 @@
-
 function MoodPicker({ mood, setMood }) {
   return (
     <div>
       <div>
-        <h2>Pick Your Mood</h2>
-        <p>Select your current mood from the options below:</p>
+        <h2 className="text-2xl font-bold text-stone-800 mb-2">Pick Your Mood</h2>
+        <p className="text-lg text-gray-500 mb-8">Select your current mood from the options below:</p>
       </div>
 
       <div className="flex gap-4 flex-wrap">

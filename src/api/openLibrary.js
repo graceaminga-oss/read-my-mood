@@ -1,6 +1,6 @@
 function getSearchTermForMood(mood) {
   const moodToSearchTerm = {
-    Cozy: 'cottage',
+    Cozy: 'holidays',
     Adventurous: 'adventure',
     Heartbroken: 'heartbreak',
     Curious: 'mystery',
@@ -8,9 +8,15 @@ function getSearchTermForMood(mood) {
   return moodToSearchTerm[mood] || 'fiction';
 }
 
-export function searchBooks(mood) {
+export async function searchBooks(mood) {
   const searchTerm = getSearchTermForMood(mood);
-  // next: actually fetch from Open Library using searchTerm
   const url = `https://openlibrary.org/subjects/${searchTerm}.json?limit=20`;
-  
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Open Library request failed: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data;
 }
