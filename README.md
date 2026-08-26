@@ -1,303 +1,811 @@
 # Read My Mood
 
-A simple **React frontend** that recommends books based on the user's **mood** and **reading comfort level**.
+A full-stack productivity application that helps users discover books based on their current mood and reading comfort level, save books to a personal shelf, and track their reading experience through mood check-ins.
+
+Read My Mood combines a React frontend with a Flask REST API and PostgreSQL database. Users can create an account, log in securely, receive personalized book recommendations, save books, update their reading status, and record reflections about how a book made them feel.
+
+---
 
 ## 1. Project Overview
 
-Read My Mood helps users find a book that matches both how they feel and how much reading they can handle at the moment.
+Read My Mood is designed around a simple idea:
 
-The app uses two independent selections:
+> The right book depends not only on what you like, but also on how you feel right now.
+
+Users select:
 
 * **Mood** — Cozy, Adventurous, Heartbroken, or Curious
-* **Comfort Level** — a scale from 1 to 5, from a quick/easy read to a longer/challenging read
+* **Reading Comfort Level** — a scale from 1 to 5
 
-After making their selections, users receive a shelf of book recommendations from the Open Library API.
+The application uses the selected mood to search the Open Library API and display book recommendations.
 
----
+Authenticated users can then save books to their personal shelf and manage their saved reading information.
 
-## 2. Scope
-
-focuses on building the **React frontend**.
-
-### Included
-
-* React frontend
-* Mood selection
-* Reading comfort selection
-* Open Library API integration
-* Book recommendations
-* Responsive book shelf
-* Loading state
-* Error handling
-* Basic accessibility
+Users can also create mood check-ins connected to their saved books. A check-in records the mood they intended to have, their actual mood, and an optional reflection.
 
 ---
 
-## 3. Setting Up the Project
+## 2. Project Goals
 
-### Create the React Project
+This project demonstrates full-stack development using:
 
-The project was created using Vite:
+* React
+* Flask
+* PostgreSQL
+* SQLAlchemy
+* Flask-Bcrypt
+* Session-based authentication
+* RESTful API routes
+* CRUD operations
+* Relational database models
+* User ownership and authorization
+* Pagination
+* External API integration
+* Responsive frontend design
 
-```bash
-npm create vite@latest read-my-mood -- --template react
-cd read-my-mood
-npm install
+---
+
+## 3. Core Features
+
+### Authentication
+
+Users can:
+
+* Sign up
+* Log in
+* Log out
+* Restore an existing session
+* Retrieve the currently authenticated user
+
+Passwords are securely hashed before being stored in the database.
+
+Authentication is handled using Flask sessions.
+
+### Mood-Based Book Recommendations
+
+Users can select their current mood and reading comfort level.
+
+The application uses the selected mood to search the Open Library API and return relevant books.
+
+### Personal Book Shelf
+
+Authenticated users can:
+
+* Save books
+* View saved books
+* View an individual saved book
+* Update saved book information
+* Delete saved books
+
+Saved book information includes:
+
+* Mood
+* Comfort level
+* Reading status
+
+Example statuses include:
+
+* Want to Read
+* Reading
+* Finished
+
+### Mood Check-Ins
+
+Users can create mood check-ins associated with their saved books.
+
+Each check-in can contain:
+
+* Intended mood
+* Actual mood
+* Reflection
+* Associated saved book
+
+Users can:
+
+* Create check-ins
+* View check-ins
+* View an individual check-in
+* Update check-ins
+* Delete check-ins
+
+### Pagination
+
+Pagination has been implemented for saved books and mood check-ins.
+
+Example:
+
+```text
+/api/saved-books?page=1&per_page=10
 ```
 
-### Install Tailwind CSS
-
-Tailwind CSS is used to style the frontend:
-
-```bash
-npm install tailwindcss @tailwindcss/vite
+```text
+/api/mood-checkins?page=1&per_page=10
 ```
 
-### Run the Application
+The API returns pagination information including:
 
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Open the local development URL provided by Vite in the terminal.
+* Current page
+* Items per page
+* Total records
+* Total pages
 
 ---
 
-## 4. How the App Works
+## 4. User Ownership and Authorization
 
-The main user flow is:
+User data is protected using ownership-based access control.
 
-**Choose a mood → Choose a comfort level → View book recommendations**
+Authenticated routes use a `login_required` decorator.
 
-When the user changes their selections, the application automatically fetches book recommendations.
+For resources belonging to users, the backend verifies both:
 
-There is no separate search button.
+```python
+id=resource_id
+user_id=current_user_id
+```
 
-The app displays:
+For example:
 
-* A loading message while books are being fetched
-* An error message if the request fails
-* The recommended books when the request is successful
+```python
+saved_book = SavedBook.query.filter_by(
+    id=saved_book_id,
+    user_id=user_id
+).first()
+```
+
+This prevents one authenticated user from accessing, modifying, or deleting another user's records.
+
+The same ownership principle is applied to mood check-ins.
 
 ---
 
-## 5. Project Structure
+## 5. Database Relationships
+
+The application uses relational database models.
+
+### User
+
+A user can have many saved books and many mood check-ins.
+
+```text
+User
+ ├── SavedBook
+ └── MoodCheckIn
+```
+
+### Book
+
+A book represents a book returned by Open Library.
+
+```text
+Book
+ └── SavedBook
+```
+
+### SavedBook
+
+`SavedBook` connects a user with a book.
+
+It stores user-specific information such as:
+
+* Mood
+* Comfort level
+* Reading status
+
+```text
+User ───< SavedBook >─── Book
+```
+
+### MoodCheckIn
+
+A mood check-in belongs to a user and is connected to one of their saved books.
+
+```text
+User ───< MoodCheckIn
+              |
+              v
+          SavedBook
+```
+
+This creates the relational structure required for the project.
+
+---
+
+## 6. CRUD Functionality
+
+### Saved Books
+
+| Operation | Method | Endpoint                |
+| --------- | ------ | ----------------------- |
+| Create    | POST   | `/api/saved-books`      |
+| Read all  | GET    | `/api/saved-books`      |
+| Read one  | GET    | `/api/saved-books/<id>` |
+| Update    | PATCH  | `/api/saved-books/<id>` |
+| Delete    | DELETE | `/api/saved-books/<id>` |
+
+### Mood Check-Ins
+
+| Operation | Method | Endpoint                  |
+| --------- | ------ | ------------------------- |
+| Create    | POST   | `/api/mood-checkins`      |
+| Read all  | GET    | `/api/mood-checkins`      |
+| Read one  | GET    | `/api/mood-checkins/<id>` |
+| Update    | PATCH  | `/api/mood-checkins/<id>` |
+| Delete    | DELETE | `/api/mood-checkins/<id>` |
+
+### Authentication
+
+| Operation    | Method | Endpoint      |
+| ------------ | ------ | ------------- |
+| Sign up      | POST   | `/api/signup` |
+| Log in       | POST   | `/api/login`  |
+| Log out      | POST   | `/api/logout` |
+| Current user | GET    | `/api/me`     |
+
+---
+
+## 7. Frontend Structure
+
+The React application is organized into reusable components.
 
 ```text
 src/
 ├── api/
+│   ├── backend.js
 │   └── openLibrary.js
+│
 ├── components/
+│   ├── AuthForm.jsx
 │   ├── BookShelf.jsx
 │   ├── ComfortMeter.jsx
-│   └── MoodPicker.jsx
-└── App.jsx
+│   ├── MoodCheckInForm.jsx
+│   ├── MoodCheckIns.jsx
+│   ├── MoodPicker.jsx
+│   └── MyShelf.jsx
+│
+├── App.jsx
+├── index.css
+└── main.jsx
 ```
 
 ### `App.jsx`
 
 The main application component.
 
-It manages the shared application state and coordinates the other components.
+It manages:
+
+* Authentication state
+* Selected mood
+* Comfort level
+* Book recommendations
+* Saved books
+* Mood check-in refresh state
+* Loading and error states
+
+### `AuthForm.jsx`
+
+Handles:
+
+* User registration
+* User login
+* Authentication form state
+* Authentication errors
 
 ### `MoodPicker.jsx`
 
-Allows the user to select one of four moods:
-
-* Cozy
-* Adventurous
-* Heartbroken
-* Curious
+Allows users to select their current mood.
 
 ### `ComfortMeter.jsx`
 
-Allows the user to select a reading comfort level from 1–5.
-
-The book icons fill progressively based on the selected level.
+Allows users to select their preferred reading comfort level from 1 to 5.
 
 ### `BookShelf.jsx`
 
-Displays the recommended books in a responsive grid.
+Displays books returned from Open Library and allows authenticated users to save books.
 
-Each book displays its cover and title.
+### `MyShelf.jsx`
+
+Displays the user's saved books and provides controls for managing saved book information.
+
+### `MoodCheckInForm.jsx`
+
+Allows users to create a mood check-in connected to a saved book.
+
+### `MoodCheckIns.jsx`
+
+Displays the user's existing mood check-ins and provides update/delete functionality.
+
+### `backend.js`
+
+Contains frontend functions for communicating with the Flask API.
+
+It handles:
+
+* Authentication requests
+* Saved book requests
+* Mood check-in requests
+
+All requests include credentials so the Flask session can be maintained.
 
 ### `openLibrary.js`
 
-Contains the API logic used to fetch books from Open Library.
-
-Keeping the API logic separate from the components makes the code easier to organize and maintain.
+Contains the external Open Library API integration used for book recommendations.
 
 ---
 
-## 6. API Integration
+## 8. Backend Structure
 
-the project uses the **Open Library API** to retrieve book recommendations.
+The Flask backend is organized into separate route modules.
 
-The application maps the selected mood to an Open Library subject and requests up to 20 results.
-
-The API request is handled using JavaScript's `fetch`.
-
-### Async Request Handling
-
-The API logic uses **`async/await`** to handle the asynchronous request.
-
-The request is wrapped in **`try/catch/finally`** so the application can handle each stage of the request:
-
-```javascript
-try {
-  // Fetch book data
-} catch (error) {
-  // Handle the error
-} finally {
-  // Finish loading
-}
+```text
+server/
+├── routes/
+│   ├── auth.py
+│   ├── books.py
+│   ├── mood_checkins.py
+│   └── saved_books.py
+│
+├── app.py
+├── auth_helpers.py
+├── config.py
+├── extensions.py
+├── models.py
+├── requirements.txt
+└── .env
 ```
 
-This allows the application to:
+### `app.py`
 
-1. Start the request.
-2. Wait for the API response using `await`.
-3. Update the books when the request succeeds.
-4. Display an error if the request fails.
-5. Always reset the loading state when the request finishes.
+Creates and configures the Flask application and registers the API routes.
+
+### `models.py`
+
+Contains the SQLAlchemy database models:
+
+* `User`
+* `Book`
+* `SavedBook`
+* `MoodCheckIn`
+
+### `auth_helpers.py`
+
+Contains authentication helper functionality, including the `login_required` decorator.
+
+### `extensions.py`
+
+Contains shared Flask extensions such as:
+
+* SQLAlchemy
+* Bcrypt
+
+### `config.py`
+
+Contains application configuration and environment-based settings.
+
+### `routes/auth.py`
+
+Handles:
+
+* Signup
+* Login
+* Logout
+* Current user/session verification
+
+### `routes/saved_books.py`
+
+Handles the full CRUD lifecycle for saved books and pagination.
+
+### `routes/mood_checkins.py`
+
+Handles the full CRUD lifecycle for mood check-ins and pagination.
 
 ---
 
-## 7. State Management
+## 9. Technologies Used
 
-The project uses React's built-in `useState` and `useEffect`.
+### Frontend
 
-The main state includes:
+* React
+* JavaScript
+* Vite
+* Tailwind CSS
 
-| State          | Purpose                                      |
-| -------------- | -------------------------------------------- |
-| `mood`         | Stores the selected mood                     |
-| `comfortLevel` | Stores the selected reading level from 1–5   |
-| `books`        | Stores the fetched book results              |
-| `loading`      | Tracks whether a request is in progress      |
-| `error`        | Stores an error message when a request fails |
+### Backend
 
-The shared state is kept in `App.jsx` and passed to the child components using props.
+* Python
+* Flask
+* Flask-SQLAlchemy
+* Flask-Bcrypt
+
+### Database
+
+* PostgreSQL
+
+### External API
+
+* Open Library API
+
+### Authentication
+
+* Flask session-based authentication
+* Password hashing with Bcrypt
+
+### Development Tools
+
+* Git
+* GitHub
+* npm
+* Python virtual environment
 
 ---
 
-## 8. Key React Concepts
+## 10. Setup Instructions
 
-This project demonstrates:
+### Prerequisites
 
-* **`useState`** for managing application state
-* **`useEffect`** for responding to changes and fetching data
-* **Props** for passing data between components
-* **Conditional rendering** for loading, error, and successful states
-* **Component-based UI design**
-* **`fetch`** for API requests
-* **`async/await`** for asynchronous operations
-* **`try/catch/finally`** for error handling and loading management
+Make sure the following are installed:
+
+* Node.js
+* npm
+* Python 3
+* PostgreSQL
+* Git
 
 ---
 
-## 9. UI & Accessibility
+## 11. Clone the Repository
 
-The frontend uses Tailwind CSS to create a responsive interface.
+```bash
+git clone <YOUR_GITHUB_REPOSITORY_URL>
+cd Read-My-Mood
+```
 
-The main UI features include:
+---
 
-* Mood buttons with visual selected states
-* Interactive comfort-level meter
-* Responsive book grid
-* Hover effects on book covers
+## 12. Frontend Setup
+
+Install the frontend dependencies:
+
+```bash
+npm install
+```
+
+Start the Vite development server:
+
+```bash
+npm run dev
+```
+
+The frontend will normally be available at:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## 13. Backend Setup
+
+Open a terminal and move into the server directory:
+
+```bash
+cd server
+```
+
+Create a Python virtual environment:
+
+```bash
+python -m venv venv
+```
+
+Activate it on Windows:
+
+```powershell
+.\venv\Scripts\Activate.ps1
+```
+
+Install the backend dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 14. Environment Variables
+
+Create a `.env` file inside the `server` directory.
+
+Example:
+
+```env
+DATABASE_URL=postgresql://username:password@localhost/read_my_mood
+SECRET_KEY=your-secret-key
+```
+
+Use your own PostgreSQL username, password, database name, and secret key.
+
+Do not commit the `.env` file to GitHub.
+
+---
+
+## 15. Database Setup
+
+Create a PostgreSQL database for the application.
+
+For example:
+
+```text
+read_my_mood
+```
+
+Make sure the `DATABASE_URL` in `.env` points to the correct database.
+
+The Flask application can then initialize and use the SQLAlchemy models.
+
+---
+
+## 16. Run the Backend
+
+From the `server` directory:
+
+```bash
+python app.py
+```
+
+The Flask development server will normally run at:
+
+```text
+http://127.0.0.1:5000
+```
+
+You should see a message similar to:
+
+```text
+Running on http://127.0.0.1:5000
+```
+
+---
+
+## 17. Running the Complete Application
+
+Two terminals are required during local development.
+
+### Terminal 1 — Flask Backend
+
+```powershell
+cd Read-My-Mood\server
+.\venv\Scripts\Activate.ps1
+python app.py
+```
+
+### Terminal 2 — React Frontend
+
+```powershell
+cd Read-My-Mood
+npm run dev
+```
+
+Then open the Vite URL shown in the terminal:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## 18. Application Flow
+
+The main user experience is:
+
+```text
+Sign Up / Log In
+       ↓
+Choose a Mood
+       ↓
+Choose Reading Comfort Level
+       ↓
+Find Recommended Books
+       ↓
+Save a Book
+       ↓
+Manage Personal Shelf
+       ↓
+Create Mood Check-In
+       ↓
+Update or Delete Records
+```
+
+---
+
+## 19. API Integration
+
+Read My Mood uses the Open Library API for book discovery.
+
+The frontend sends requests to Open Library based on the selected mood.
+
+The results are transformed into book cards containing information such as:
+
+* Title
+* Author
+* Cover image
+* Open Library identifier
+
+The selected book can then be saved to the application's PostgreSQL database.
+
+This creates a separation between:
+
+1. External book discovery
+2. Application-owned user data
+
+---
+
+## 20. Error Handling
+
+The application handles common errors on both the frontend and backend.
+
+Examples include:
+
+* Invalid login credentials
+* Missing required fields
+* Unauthenticated API requests
+* Unauthorized access to another user's records
+* Duplicate saved books
+* Failed external API requests
+* Empty search results
+
+The frontend displays appropriate feedback instead of failing silently.
+
+---
+
+## 21. Accessibility and Responsive Design
+
+The interface is designed to work across different screen sizes.
+
+The application includes:
+
+* Semantic HTML
+* Accessible interactive controls
+* Clear visual states
+* Responsive layouts
 * Loading feedback
 * Error feedback
+* Mobile-friendly book grids
 
-The application also uses semantic HTML and `aria-label`s on the comfort-level buttons to make the interface more accessible.
-
----
-
-## 10. Design Decisions
-
-### Independent Mood and Comfort Level
-
-Mood and comfort level are intentionally separate.
-
-For example, a user can be:
-
-* **Heartbroken + Comfort Level 5**
-* **Cozy + Comfort Level 1**
-
-The app does not assume that a particular mood determines how difficult a book should be.
-
-### 20 Book Limit
-
-The results are limited to 20 books so that the recommendation shelf remains manageable and easy to browse.
-
-### No Separate Search Button
-
-The app automatically fetches recommendations when the user's selections change.
-
-This keeps the interaction simple:
-
-**Select → Fetch → Browse**
+Tailwind CSS is used for responsive styling and consistent UI design.
 
 ---
 
-## 11. Phase 1 Limitations
+## 22. Security Considerations
 
-The current version does not include:
+The application includes several security measures:
 
-* Backend integration
-* Database storage
-* Authentication
-* User accounts
-* Saved books
-* Favorites
+* Passwords are hashed using Bcrypt.
+* Authentication is handled using Flask sessions.
+* Protected routes require authentication.
+* User-owned resources are filtered by `user_id`.
+* Users cannot update or delete another user's saved books.
+* Users cannot access another user's mood check-ins.
+* Environment variables are used for sensitive configuration.
+* `.env` should not be committed to the repository.
+
+---
+
+## 23. Git and Repository Hygiene
+
+The project uses Git for version control.
+
+The repository should contain:
+
+* Frontend source code
+* Backend source code
+* README documentation
+* Dependency files
+* Configuration files required to run the project
+
+The following should **not** be committed:
+
+```text
+node_modules/
+venv/
+.env
+__pycache__/
+*.pyc
+dist/
+```
+
+These files are excluded through `.gitignore` where appropriate.
+
+---
+
+## 24. Testing
+
+The application was tested locally with both the React frontend and Flask backend running.
+
+Testing covered the main application flow, including:
+
+* User signup
+* User login
+* User logout
+* Session restoration
+* Book searching
+* Saving books
+* Viewing saved books
+* Updating saved books
+* Deleting saved books
+* Creating mood check-ins
+* Viewing mood check-ins
+* Updating mood check-ins
+* Deleting mood check-ins
 * Pagination
-* Automated tests
-
-These features can be considered for future development.
-
----
-
-## 12. Future Improvements
-
-Possible improvements for later phases include:
-
-* Adding a backend
-* Adding user authentication
-* Saving favorite books
-* Adding user accounts
-* Adding a database
-* Improving book recommendations based on comfort level
-* Adding pagination or a "Load More" option
-* Adding automated tests
-* Adding caching to avoid unnecessary API requests
+* Authentication-protected routes
+* Ownership-based access control
 
 ---
 
-## 13. Tech Stack
+## 25. Future Improvements
 
-* **React**
-* **Vite**
-* **Tailwind CSS**
-* **JavaScript**
-* **Open Library API**
+Possible future enhancements include:
+
+* Deploying the application publicly
+* Adding a user dashboard
+* Reading statistics and reports
+* Book recommendations based on reading history
+* More advanced mood categories
+* AI-powered book recommendations
+* Book search filters
+* Reading goals
+* Progress tracking
+* Automated backend tests
+* Automated frontend tests
+* Improved pagination controls
+* Loading skeletons and optimistic UI updates
 
 ---
 
-## Summary
+## 26. Project Requirements Checklist
 
-The goal is to create a working **React frontend** that demonstrates:
+The final project addresses the main Project 2 requirements:
 
-* Component-based development
-* React state management
-* User interaction
-* API integration
-* Asynchronous data handling
-* Error and loading states
-* Responsive UI
+* [x] React frontend
+* [x] Flask backend
+* [x] PostgreSQL database
+* [x] User authentication
+* [x] Signup
+* [x] Login
+* [x] Logout
+* [x] Session management
+* [x] Password hashing
+* [x] At least two relational resources
+* [x] Saved Books CRUD
+* [x] Mood Check-Ins CRUD
+* [x] Ownership-based authorization
+* [x] Pagination
+* [x] External API integration
+* [x] Responsive interface
+* [x] README documentation
+* [x] Git version control
 
-The final user flow is:
+---
 
-**Choose a mood → Choose a comfort level → Get book recommendations**
-”
+## 27. Repository
+
+GitHub Repository:
+
+**<YOUR_PUBLIC_GITHUB_REPOSITORY_URL>**
+
+Live Application:
+
+**<YOUR_DEPLOYED_APPLICATION_URL>**
+
+> Replace the placeholders above with the actual links before submission.
+
+---
+
+## 28. Conclusion
+
+Read My Mood evolved from a React book recommendation interface into a complete full-stack productivity application.
+
+The final application combines mood-based book discovery with personal reading management. Users can authenticate, discover books, save them to a personal shelf, manage their reading information, and record reflections through mood check-ins.
+
+The project demonstrates full-stack application development, RESTful API design, relational database modeling, authentication, authorization, CRUD functionality, pagination, external API integration, and responsive React development.
