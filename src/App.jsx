@@ -308,7 +308,10 @@ function App() {
               }}
             />
 
-            <MoodCheckIns refreshKey={checkInRefreshKey} />
+            <MoodCheckIns
+            refreshKey={checkInRefreshKey}
+              savedBooks={savedBooks}
+/>
           </>
         )}
 
