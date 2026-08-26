@@ -5,12 +5,19 @@ function getSearchTermForMood(mood) {
     Heartbroken: 'heartbreak',
     Curious: 'mystery',
   };
+
   return moodToSearchTerm[mood] || 'fiction';
 }
 
 export async function searchBooks(mood) {
   const searchTerm = getSearchTermForMood(mood);
-  const url = `https://openlibrary.org/subjects/${searchTerm}.json?limit=20`;
+
+  const url =
+    `https://openlibrary.org/search.json` +
+    `?subject=${encodeURIComponent(searchTerm)}` +
+    `&limit=40` +
+    `&fields=key,title,author_name,cover_i`;
+
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -18,5 +25,19 @@ export async function searchBooks(mood) {
   }
 
   const data = await response.json();
-  return data;
+
+  const books = (data.docs || [])
+    .filter((book) => book.cover_i)
+    .map((book) => ({
+      key: book.key,
+      title: book.title,
+      cover_id: book.cover_i,
+      authors: (book.author_name || []).map((name) => ({
+        name,
+      })),
+    }));
+
+  return {
+    works: books,
+  };
 }
