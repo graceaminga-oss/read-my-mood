@@ -6,6 +6,20 @@ import {
   updateSavedBook,
 } from '../api/backend';
 
+function getMood(mood) {
+  const colors = {
+    cozy: '#C08A32',
+    hopeful: '#B8D9C4',
+    melancholic: '#7C7660',
+    adventurous: '#8C4A3A',
+    reflective: '#6B7A8F',
+  };
+
+  return {
+    color: colors[mood?.toLowerCase()] || '#7C7660',
+  };
+}
+
 function MyShelf({ savedBooks, setSavedBooks }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -58,8 +72,8 @@ function MyShelf({ savedBooks, setSavedBooks }) {
   if (loading) {
     return (
       <section className="text-center py-12">
-        <p className="text-stone-500">
-          Loading your shelf...
+        <p className="font-mono text-[#7C7660] text-sm tracking-wide">
+          fetching your shelf…
         </p>
       </section>
     );
@@ -68,126 +82,121 @@ function MyShelf({ savedBooks, setSavedBooks }) {
   return (
     <section className="mt-16">
       <div className="mb-7">
-        <p className="text-sm font-semibold text-stone-400 uppercase tracking-wider">
+        <p className="font-mono text-xs tracking-[0.25em] uppercase text-[#B8D9C4] mb-2">
           Your collection
         </p>
 
-        <h2 className="text-3xl font-bold mt-1">
+        <h2 className="font-serif text-3xl font-semibold text-[#F3ECDA]">
           My Reading Shelf
         </h2>
 
-        <p className="text-stone-500 mt-2">
-          Books you've saved for your reading journey.
+        <p className="text-[#C9D6C6] mt-2 font-sans">
+          Books you've checked out for your reading journey.
         </p>
       </div>
 
       {error && (
-        <div className="mb-6 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+        <div className="mb-6 border border-[#8C4A3A] bg-[#3A2420] px-4 py-3 text-sm text-[#F0C9BC] font-sans">
           {error}
         </div>
       )}
 
       {savedBooks.length === 0 ? (
-        <div className="bg-white border border-stone-200 rounded-3xl p-10 text-center">
-          <h3 className="text-xl font-semibold mb-2">
+        <div className="bg-[#F3ECDA] border border-dashed border-[#B0A67F] p-10 text-center">
+          <h3 className="font-serif text-xl font-semibold text-[#1B2A22] mb-2">
             Your shelf is empty
           </h3>
 
-          <p className="text-stone-500">
-            Find a book that matches your mood and save it here.
+          <p className="text-[#5B5646] font-sans">
+            Find a book that matches your mood and check it out here.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
-          {savedBooks.map((savedBook) => (
-            <article
-              key={savedBook.id}
-              className="bg-white border border-stone-200 rounded-2xl p-3 shadow-sm"
-            >
-              <div className="overflow-hidden rounded-xl bg-stone-100">
-                {savedBook.book.cover_url ? (
-                  <img
-                    src={savedBook.book.cover_url}
-                    alt={`Cover of ${savedBook.book.title}`}
-                    className="w-full aspect-[2/3] object-cover"
-                  />
-                ) : (
-                  <div className="w-full aspect-[2/3] flex flex-col items-center justify-center p-6 text-center">
-                    <span className="text-4xl mb-3">
-                      📖
-                    </span>
+          {savedBooks.map((savedBook) => {
+            const moodTag = getMood(savedBook.mood);
 
-                    <p className="text-sm text-stone-500">
-                      Cover unavailable
-                    </p>
+            return (
+              <article
+                key={savedBook.id}
+                className="bg-[#F3ECDA] border border-[#D9CFB0] p-3 relative"
+              >
+                {/* Colored spine edge tying back to the mood ribbon */}
+                <span
+                  className="absolute left-0 top-0 bottom-0 w-1.5"
+                  style={{ backgroundColor: moodTag.color }}
+                  aria-hidden="true"
+                />
+
+                <div className="overflow-hidden bg-[#E3DBC2] ml-1">
+                  {savedBook.book.cover_url ? (
+                    <img
+                      src={savedBook.book.cover_url}
+                      alt={`Cover of ${savedBook.book.title}`}
+                      className="w-full aspect-[2/3] object-cover"
+                    />
+                  ) : (
+                    <div className="w-full aspect-[2/3] flex flex-col items-center justify-center gap-2 p-6 text-center">
+                      <span className="text-3xl">📖</span>
+                      <span className="font-mono text-[10px] uppercase tracking-wide text-[#8C8368]">
+                        Cover unavailable
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-4 px-1">
+                  <h3 className="font-serif font-semibold text-[#1B2A22] leading-snug">
+                    {savedBook.book.title}
+                  </h3>
+
+                  <p className="text-sm text-[#7C7660] mt-1 font-sans">
+                    {savedBook.book.author}
+                  </p>
+
+                  {/* Stamp block — mood + comfort, the recurring "due date card" motif */}
+                  <div className="mt-3 border-2 border-[#1B2A22]/60 px-2.5 py-2 -rotate-1 font-mono text-[11px] text-[#1B2A22] leading-relaxed">
+                    <div className="flex justify-between">
+                      <span className="text-[#7C7660]">mood</span>
+                      <span style={{ color: moodTag.color }}>
+                        {savedBook.mood || '—'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-[#7C7660]">comfort</span>
+                      <span>{savedBook.comfort_level || '—'}</span>
+                    </div>
                   </div>
-                )}
-              </div>
 
-              <div className="pt-4 px-1">
-                <h3 className="font-semibold text-stone-800 leading-snug">
-                  {savedBook.book.title}
-                </h3>
+                  <div className="mt-4">
+                    <label className="block text-[10px] font-mono uppercase tracking-wider text-[#7C7660] mb-1">
+                      Reading status
+                    </label>
 
-                <p className="text-sm text-stone-500 mt-1">
-                  {savedBook.book.author}
-                </p>
+                    <select
+                      value={savedBook.status || 'Want to Read'}
+                      onChange={(event) =>
+                        handleStatusChange(savedBook.id, event.target.value)
+                      }
+                      className="w-full border border-[#D9CFB0] px-2.5 py-2 text-sm bg-white/40 font-sans outline-none focus:border-[#C08A32]"
+                    >
+                      <option value="Want to Read">Want to Read</option>
+                      <option value="Reading">Reading</option>
+                      <option value="Finished">Finished</option>
+                    </select>
+                  </div>
 
-                <div className="mt-3 space-y-1 text-sm text-stone-600">
-                  <p>
-                    <span className="font-medium">
-                      Mood:
-                    </span>{' '}
-                    {savedBook.mood || 'Not specified'}
-                  </p>
-
-                  <p>
-                    <span className="font-medium">
-                      Comfort:
-                    </span>{' '}
-                    {savedBook.comfort_level || 'Not specified'}
-                  </p>
-                </div>
-
-                <div className="mt-4">
-                  <label className="block text-xs font-medium text-stone-500 mb-1">
-                    Reading status
-                  </label>
-
-                  <select
-                    value={savedBook.status || 'Want to Read'}
-                    onChange={(event) =>
-                      handleStatusChange(
-                        savedBook.id,
-                        event.target.value
-                      )
-                    }
-                    className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm bg-white"
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(savedBook.id)}
+                    className="w-full mt-3 border border-[#8C4A3A] text-[#8C4A3A] py-2 text-sm font-mono uppercase tracking-wide hover:bg-[#8C4A3A] hover:text-[#F3ECDA] transition-colors"
                   >
-                    <option value="Want to Read">
-                      Want to Read
-                    </option>
-
-                    <option value="Reading">
-                      Reading
-                    </option>
-
-                    <option value="Finished">
-                      Finished
-                    </option>
-                  </select>
+                    Return book
+                  </button>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleDelete(savedBook.id)}
-                  className="w-full mt-3 rounded-xl border border-red-200 text-red-600 py-2 text-sm font-semibold hover:bg-red-50 transition"
-                >
-                  Remove
-                </button>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       )}
     </section>
