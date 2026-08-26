@@ -104,7 +104,7 @@ function App() {
   if (loadingAuth) {
     return (
       <div className="min-h-screen bg-[#21402F] flex items-center justify-center">
-        <p className="font-mono text-[#C9D6C6] text-sm tracking-wide">
+        <p className="font-['Courier_Prime'] text-[#C9D6C6] text-sm tracking-wide">
           checking your session…
         </p>
       </div>
@@ -123,11 +123,11 @@ function App() {
         {/* Navigation */}
         <nav className="flex items-center justify-between mb-12">
           <div>
-            <p className="font-serif font-semibold text-xl text-[#F3ECDA]">
+            <p className="font-['Fraunces'] font-semibold text-xl text-[#F3ECDA]">
               Read My Mood
             </p>
 
-            <p className="font-mono text-xs text-[#B8D9C4] mt-0.5">
+            <p className="font-['Courier_Prime'] text-xs text-[#B8D9C4] mt-0.5">
               welcome, {user.name}
             </p>
           </div>
@@ -135,7 +135,7 @@ function App() {
           <button
             type="button"
             onClick={handleLogout}
-            className="px-4 py-2 border border-[#F3ECDA]/30 text-[#F3ECDA] text-sm font-mono uppercase tracking-wide hover:bg-[#F3ECDA]/10 transition-colors"
+            className="px-4 py-2 border border-[#F3ECDA]/30 text-[#F3ECDA] text-sm font-['Courier_Prime'] uppercase tracking-wide hover:bg-[#F3ECDA]/10 transition-colors"
           >
             Sign out
           </button>
@@ -143,15 +143,15 @@ function App() {
 
         {/* Hero Section */}
         <header className="text-center mb-16">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#B8D9C4] mb-4">
+          <p className="font-['Courier_Prime'] text-xs uppercase tracking-[0.3em] text-[#B8D9C4] mb-4">
             Your next read starts here
           </p>
 
-          <h1 className="font-serif text-5xl sm:text-6xl font-semibold tracking-tight text-[#F3ECDA] mb-5">
+          <h1 className="font-['Fraunces'] text-5xl sm:text-6xl font-semibold tracking-tight text-[#F3ECDA] mb-5">
             Read My Mood
           </h1>
 
-          <p className="text-lg sm:text-xl text-[#C9D6C6] max-w-xl mx-auto leading-relaxed font-sans">
+          <p className="text-lg sm:text-xl text-[#C9D6C6] max-w-xl mx-auto leading-relaxed font-['Public_Sans']">
             Not sure what to read? Tell us how you're feeling and we'll find
             something that fits the moment.
           </p>
@@ -178,15 +178,15 @@ function App() {
           {/* Selection Summary */}
           {mood && comfortLevel && status === 'idle' && (
             <section className="bg-[#F3ECDA] border border-[#D9CFB0] p-6 sm:p-8 text-center">
-              <p className="font-mono text-xs uppercase tracking-[0.25em] text-[#7C7660] mb-3">
+              <p className="font-['Courier_Prime'] text-xs uppercase tracking-[0.25em] text-[#7C7660] mb-3">
                 Your reading mood
               </p>
 
-              <h2 className="font-serif text-2xl font-semibold text-[#1B2A22] mb-2">
+              <h2 className="font-['Fraunces'] text-2xl font-semibold text-[#1B2A22] mb-2">
                 Ready to find your next book?
               </h2>
 
-              <p className="text-[#5B5646] mb-6 font-sans">
+              <p className="text-[#5B5646] mb-6 font-['Public_Sans']">
                 You've chosen a{' '}
                 <span className="font-semibold text-[#1B2A22]">{mood}</span>{' '}
                 mood with reading level{' '}
@@ -196,7 +196,7 @@ function App() {
               <button
                 type="button"
                 onClick={handleFindBooks}
-                className="px-8 py-3.5 border-2 border-[#1B2A22] bg-[#1B2A22] text-[#F3ECDA] font-mono uppercase tracking-wide hover:bg-[#F3ECDA] hover:text-[#1B2A22] transition-colors"
+                className="px-8 py-3.5 border-2 border-[#1B2A22] bg-[#1B2A22] text-[#F3ECDA] font-['Courier_Prime'] uppercase tracking-wide hover:bg-[#F3ECDA] hover:text-[#1B2A22] transition-colors"
               >
                 Find my books
               </button>
@@ -218,11 +218,11 @@ function App() {
                 />
               </div>
 
-              <h2 className="font-serif text-xl font-semibold text-[#F3ECDA] mb-2">
+              <h2 className="font-['Fraunces'] text-xl font-semibold text-[#F3ECDA] mb-2">
                 Finding your matches…
               </h2>
 
-              <p className="text-[#C9D6C6] font-sans">
+              <p className="text-[#C9D6C6] font-['Public_Sans']">
                 Looking for books that fit your mood.
               </p>
             </section>
@@ -231,18 +231,18 @@ function App() {
           {/* Error */}
           {status === 'error' && (
             <section className="bg-[#3A2420] border border-[#8C4A3A] p-8 text-center">
-              <h2 className="font-serif text-xl font-semibold text-[#F0C9BC] mb-2">
+              <h2 className="font-['Fraunces'] text-xl font-semibold text-[#F0C9BC] mb-2">
                 Something went wrong
               </h2>
 
-              <p className="text-[#E0B3A4] mb-5 font-sans">
+              <p className="text-[#E0B3A4] mb-5 font-['Public_Sans']">
                 We couldn't connect to the book library.
               </p>
 
               <button
                 type="button"
                 onClick={handleFindBooks}
-                className="px-5 py-2.5 border-2 border-[#F0C9BC] text-[#F0C9BC] font-mono uppercase tracking-wide hover:bg-[#F0C9BC] hover:text-[#3A2420] transition-colors"
+                className="px-5 py-2.5 border-2 border-[#F0C9BC] text-[#F0C9BC] font-['Courier_Prime'] uppercase tracking-wide hover:bg-[#F0C9BC] hover:text-[#3A2420] transition-colors"
               >
                 Try again
               </button>
@@ -252,18 +252,18 @@ function App() {
           {/* Empty Results */}
           {status === 'empty' && (
             <section className="bg-[#F3ECDA] border border-dashed border-[#B0A67F] p-8 text-center">
-              <h2 className="font-serif text-xl font-semibold text-[#1B2A22] mb-2">
+              <h2 className="font-['Fraunces'] text-xl font-semibold text-[#1B2A22] mb-2">
                 We couldn't find any matches
               </h2>
 
-              <p className="text-[#5B5646] mb-5 font-sans">
+              <p className="text-[#5B5646] mb-5 font-['Public_Sans']">
                 Try choosing a different mood and search again.
               </p>
 
               <button
                 type="button"
                 onClick={startOver}
-                className="text-sm font-mono uppercase tracking-wide underline text-[#1B2A22]"
+                className="text-sm font-['Courier_Prime'] uppercase tracking-wide underline text-[#1B2A22]"
               >
                 Start over
               </button>
@@ -284,7 +284,7 @@ function App() {
                 <button
                   type="button"
                   onClick={startOver}
-                  className="text-sm font-mono uppercase tracking-wide text-[#C9D6C6] underline hover:text-[#F3ECDA] transition-colors"
+                  className="text-sm font-['Courier_Prime'] uppercase tracking-wide text-[#C9D6C6] underline hover:text-[#F3ECDA] transition-colors"
                 >
                   Start over
                 </button>
@@ -308,12 +308,15 @@ function App() {
               }}
             />
 
-            <MoodCheckIns refreshKey={checkInRefreshKey} />
+            <MoodCheckIns
+            refreshKey={checkInRefreshKey}
+              savedBooks={savedBooks}
+/>
           </>
         )}
 
         <footer className="text-center mt-20 pt-8 border-t border-[#F3ECDA]/10">
-          <p className="font-mono text-xs text-[#B8D9C4] tracking-wide">
+          <p className="font-['Courier_Prime'] text-xs text-[#B8D9C4] tracking-wide">
             Read My Mood · Find a book that fits the moment.
           </p>
         </footer>

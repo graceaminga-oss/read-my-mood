@@ -37,15 +37,11 @@ function MoodPicker({ mood, setMood }) {
   return (
     <div>
       <div className="mb-6">
-        <p className="font-mono text-xs tracking-[0.25em] uppercase text-[#7C7660] mb-2">
-          Step 01
-        </p>
-
-        <h2 className="font-serif text-2xl sm:text-3xl font-semibold text-[#1B2A22]">
-          Pick your mood
+        <h2 className="text-2xl font-bold text-stone-800 mb-2">
+          Pick Your Mood
         </h2>
 
-        <p className="text-[#5B5646] mt-2 font-sans">
+        <p className="text-stone-500">
           Choose the mood that best describes how you feel right now.
         </p>
       </div>
@@ -59,45 +55,54 @@ function MoodPicker({ mood, setMood }) {
               key={item.name}
               type="button"
               onClick={() => setMood(item.name)}
-              aria-pressed={isSelected}
               className={`
-                group relative text-left p-5
-                bg-[#F3ECDA] border transition-all duration-200
-                focus:outline-none focus:ring-2 focus:ring-[#C08A32] focus:ring-offset-2 focus:ring-offset-[#21402F]
-                ${isSelected
-                  ? 'border-[#1B2A22]/30 shadow-[4px_4px_0_0_rgba(27,42,34,0.15)] -translate-y-0.5'
-                  : 'border-[#D9CFB0] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_0_rgba(27,42,34,0.08)]'
+                relative
+                text-left
+                p-5
+                rounded-2xl
+                border-2
+                transition-all
+                duration-200
+                hover:-translate-y-1
+                hover:shadow-md
+                focus:outline-none
+                focus:ring-2
+                focus:ring-stone-400
+                ${
+                  isSelected
+                    ? item.selected
+                    : 'border-stone-200 bg-white hover:border-stone-300'
                 }
               `}
             >
-              {/* Color chip, top-right corner: rounded square, color-coded per mood */}
-              <span
-                className="absolute top-4 right-4 w-3 h-3 rounded-full"
-                style={{ backgroundColor: item.color }}
-                aria-hidden="true"
-              />
-
+              {/* Selected checkmark */}
               {isSelected && (
-                <span
-                  className="absolute top-4 right-9 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white font-mono"
-                  style={{ backgroundColor: item.color }}
-                >
+                <span className="absolute top-4 right-4 text-sm font-bold">
                   ✓
                 </span>
               )}
 
+              {/* Mood icon */}
               <div
-                className="w-11 h-11 flex items-center justify-center text-xl mb-4 rounded-full border border-[#1B2A22]/10"
-                style={{ backgroundColor: isSelected ? item.soft : '#EAE4D2' }}
+                className={`
+                  w-12 h-12
+                  rounded-xl
+                  flex items-center justify-center
+                  text-2xl
+                  mb-4
+                  ${isSelected ? item.iconBg : 'bg-stone-100'}
+                `}
               >
                 {item.icon}
               </div>
 
-              <h3 className="font-serif text-lg font-semibold text-[#1B2A22] mb-1">
+              {/* Mood name */}
+              <h3 className="text-lg font-bold text-stone-800 mb-1">
                 {item.name}
               </h3>
 
-              <p className="text-sm text-[#5B5646] leading-relaxed font-sans">
+              {/* Mood description */}
+              <p className="text-sm text-stone-500 leading-relaxed">
                 {item.description}
               </p>
             </button>

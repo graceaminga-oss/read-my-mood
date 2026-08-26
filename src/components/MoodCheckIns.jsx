@@ -3,27 +3,19 @@ import { useEffect, useState } from 'react';
 import {
   getMoodCheckIns,
   deleteMoodCheckIn,
+  updateMoodCheckIn,
 } from '../api/backend';
-
-function getMood(mood) {
-  const moodColors = {
-    happy: '#B8860B',
-    calm: '#4F7C66',
-    sad: '#537A9B',
-    anxious: '#A05A3C',
-    angry: '#8C4A3A',
-    hopeful: '#6B7F3A',
-  };
-
-  return {
-    color: moodColors[String(mood || '').toLowerCase()] || '#7C7660',
-  };
-}
 
 function MoodCheckIns({ refreshKey, savedBooks = [] }) {
   const [checkins, setCheckins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const [editingId, setEditingId] = useState(null);
+  const [intendedMood, setIntendedMood] = useState('');
+  const [actualMood, setActualMood] = useState('');
+  const [reflection, setReflection] = useState('');
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     async function loadCheckIns() {
@@ -42,6 +34,48 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
 
     loadCheckIns();
   }, [refreshKey]);
+
+  function startEditing(checkin) {
+    setEditingId(checkin.id);
+    setIntendedMood(checkin.intended_mood || '');
+    setActualMood(checkin.actual_mood || '');
+    setReflection(checkin.reflection || '');
+    setError('');
+  }
+
+  function cancelEditing() {
+    setEditingId(null);
+    setIntendedMood('');
+    setActualMood('');
+    setReflection('');
+  }
+
+  async function handleUpdate(checkinId) {
+    setError('');
+    setSaving(true);
+
+    try {
+      const result = await updateMoodCheckIn(checkinId, {
+        intended_mood: intendedMood,
+        actual_mood: actualMood,
+        reflection,
+      });
+
+      setCheckins((previous) =>
+        previous.map((checkin) =>
+          checkin.id === checkinId
+            ? result.mood_checkin
+            : checkin
+        )
+      );
+
+      cancelEditing();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
 
   async function handleDelete(checkinId) {
     setError('');
@@ -68,17 +102,9 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
   if (loading) {
     return (
       <section className="text-center py-12">
-        <p className="font-mono text-[#7C7660] text-sm tracking-wide">
-          pulling your reflections…
+        <p className="text-stone-500">
+          Loading your mood check-ins...
         </p>
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className="border border-[#8C4A3A] bg-[#3A2420] p-6">
-        <p className="text-[#F0C9BC] font-sans">{error}</p>
       </section>
     );
   }
@@ -86,99 +112,191 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
   return (
     <section className="mt-16">
       <div className="mb-7">
-        <p className="font-mono text-xs tracking-[0.25em] uppercase text-[#B8D9C4] mb-2">
+        <p className="text-sm font-semibold text-stone-400 uppercase tracking-wider">
           Your reflections
         </p>
 
-        <h2 className="font-serif text-3xl font-semibold text-[#F3ECDA]">
+        <h2 className="text-3xl font-bold mt-1">
           Mood Check-ins
         </h2>
 
-        <p className="text-[#C9D6C6] mt-2 font-sans">
+        <p className="text-stone-500 mt-2">
           Look back at how your reading made you feel.
         </p>
       </div>
 
+      {error && (
+        <div className="mb-6 bg-red-50 border border-red-200 rounded-2xl p-4">
+          <p className="text-sm text-red-700">
+            {error}
+          </p>
+        </div>
+      )}
+
       {checkins.length === 0 ? (
-        <div className="bg-[#F3ECDA] border border-dashed border-[#B0A67F] p-10 text-center">
-          <h3 className="font-serif text-xl font-semibold text-[#1B2A22] mb-2">
+        <div className="bg-white border border-stone-200 rounded-3xl p-10 text-center">
+          <h3 className="text-xl font-semibold mb-2">
             No check-ins yet
           </h3>
 
-          <p className="text-[#5B5646] font-sans">
+          <p className="text-stone-500">
             Your reading reflections will appear here.
           </p>
         </div>
       ) : (
         <div className="space-y-4">
-          {checkins.map((checkin) => {
-            const intendedTag = getMood(checkin.intended_mood);
-            const actualTag = getMood(checkin.actual_mood);
-            const moodShifted =
-              checkin.intended_mood &&
-              checkin.intended_mood !== checkin.actual_mood;
-
-            return (
-              <article
-                key={checkin.id}
-                className="bg-[#F3ECDA] border border-[#D9CFB0] p-6"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                  <div>
-                    <p className="font-mono text-[11px] uppercase tracking-widest text-[#7C7660]">
-                      {new Date(checkin.created_at).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'short',
-                        day: '2-digit',
-                      })}
+          {checkins.map((checkin) => (
+            <article
+              key={checkin.id}
+              className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm"
+            >
+              {editingId === checkin.id ? (
+                <>
+                  <div className="mb-5">
+                    <p className="text-sm text-stone-400">
+                      Editing check-in
                     </p>
 
-                    <h3 className="font-serif text-xl font-semibold text-[#1B2A22] mt-1">
-                      {checkin.actual_mood}
+                    <h3 className="text-xl font-semibold text-stone-800 mt-1">
+                      {getBookTitle(checkin.saved_book_id)}
                     </h3>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(checkin.id)}
-                    className="text-sm font-mono uppercase tracking-wide text-[#8C4A3A] hover:text-[#6E3A2D] self-start"
-                  >
-                    delete
-                  </button>
-                </div>
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-medium text-stone-700 mb-2">
+                        Intended mood
+                      </label>
 
-                {/* Intended → actual mood shift, stamped */}
-                <div className="mt-4 inline-flex items-center gap-3 border-2 border-[#1B2A22]/60 px-3 py-2 -rotate-1 font-mono text-xs uppercase tracking-wide">
-                  <span style={{ color: intendedTag.color }}>
-                    {checkin.intended_mood || 'not set'}
-                  </span>
-                  <span className="text-[#7C7660]">→</span>
-                  <span style={{ color: actualTag.color }}>
-                    {checkin.actual_mood}
-                  </span>
-                  {moodShifted && (
-                    <span className="text-[#7C7660] normal-case">(shifted)</span>
-                  )}
-                </div>
+                      <input
+                        type="text"
+                        value={intendedMood}
+                        onChange={(event) =>
+                          setIntendedMood(event.target.value)
+                        }
+                        className="w-full rounded-xl border border-stone-300 px-4 py-3"
+                      />
+                    </div>
 
-                <p className="text-sm text-[#7C7660] mt-3 font-sans">
-                  Saved book: {getBookTitle(checkin.saved_book_id)}
-                </p>
+                    <div>
+                      <label className="block text-sm font-medium text-stone-700 mb-2">
+                        Actual mood
+                      </label>
 
-                {checkin.reflection && (
-                  <div className="mt-4 border-l-2 border-[#D9CFB0] pl-4">
-                    <p className="text-xs font-mono uppercase tracking-wider text-[#7C7660] mb-1">
+                      <input
+                        type="text"
+                        value={actualMood}
+                        onChange={(event) =>
+                          setActualMood(event.target.value)
+                        }
+                        required
+                        className="w-full rounded-xl border border-stone-300 px-4 py-3"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-5">
+                    <label className="block text-sm font-medium text-stone-700 mb-2">
                       Reflection
+                    </label>
+
+                    <textarea
+                      value={reflection}
+                      onChange={(event) =>
+                        setReflection(event.target.value)
+                      }
+                      rows={4}
+                      className="w-full rounded-xl border border-stone-300 px-4 py-3 resize-none"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 mt-5">
+                    <button
+                      type="button"
+                      onClick={() => handleUpdate(checkin.id)}
+                      disabled={saving || !actualMood.trim()}
+                      className="rounded-xl bg-stone-800 text-white px-5 py-2.5 font-semibold hover:bg-stone-700 disabled:opacity-50 transition"
+                    >
+                      {saving ? 'Saving...' : 'Save Changes'}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={cancelEditing}
+                      disabled={saving}
+                      className="rounded-xl border border-stone-300 px-5 py-2.5 font-semibold text-stone-700 hover:bg-stone-50 transition"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                    <div>
+                      <p className="text-sm text-stone-400">
+                        Check-in
+                      </p>
+
+                      <h3 className="text-xl font-semibold text-stone-800 mt-1">
+                        {checkin.actual_mood}
+                      </h3>
+                    </div>
+
+                    <div className="flex gap-4">
+                      <button
+                        type="button"
+                        onClick={() => startEditing(checkin)}
+                        className="text-sm font-semibold text-stone-700 hover:text-stone-900"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(checkin.id)}
+                        className="text-sm font-semibold text-red-600 hover:text-red-800"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+                    <p className="text-stone-600">
+                      <span className="font-medium">
+                        Intended mood:
+                      </span>{' '}
+                      {checkin.intended_mood || 'Not specified'}
                     </p>
 
-                    <p className="text-[#3A362A] font-sans italic">
-                      {checkin.reflection}
+                    <p className="text-stone-600">
+                      <span className="font-medium">
+                        Saved book:
+                      </span>{' '}
+                      {getBookTitle(checkin.saved_book_id)}
                     </p>
                   </div>
-                )}
-              </article>
-            );
-          })}
+
+                  {checkin.reflection && (
+                    <div className="mt-4 bg-stone-50 rounded-xl p-4">
+                      <p className="text-sm font-medium text-stone-700 mb-1">
+                        Reflection
+                      </p>
+
+                      <p className="text-stone-600">
+                        {checkin.reflection}
+                      </p>
+                    </div>
+                  )}
+
+                  <p className="text-xs text-stone-400 mt-4">
+                    {new Date(checkin.created_at).toLocaleDateString()}
+                  </p>
+                </>
+              )}
+            </article>
+          ))}
         </div>
       )}
     </section>

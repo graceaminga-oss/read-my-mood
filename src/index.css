@@ -2,8 +2,9 @@
 
 body {
   margin: 0;
-  background-color: #21402F;
-  color: #1B2A22;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #faf9f6;
+  color: #292524;
 }
 
 * {
@@ -15,11 +16,11 @@ button {
 }
 
 button:focus-visible {
-  outline: 3px solid #C08A32;
+  outline: 3px solid #a8a29e;
   outline-offset: 3px;
 }
 
 ::selection {
-  background-color: #C08A32;
-  color: #F3ECDA;
+  background-color: #e7e5e4;
+  color: #292524;
 }

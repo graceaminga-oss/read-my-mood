@@ -33,23 +33,35 @@ function ComfortMeter({ comfortLevel, setComfortLevel }) {
 
   return (
     <div>
+      {/* Heading */}
       <div className="mb-6">
-        <p className="font-mono text-xs tracking-[0.25em] uppercase text-[#7C7660] mb-2">
-          Step 02
+        <p className="text-sm font-semibold text-stone-400 uppercase tracking-wider mb-2">
+          Reading time
         </p>
 
-        <h2 className="font-serif text-2xl font-semibold text-[#1B2A22]">
+        <h2 className="text-2xl font-bold text-stone-800 mb-2">
           How much do you want to read?
         </h2>
 
-        <p className="text-[#5B5646] mt-2 font-sans">
-          The taller the spine, the longer you'll want to stay.
+        <p className="text-stone-500">
+          Choose how much time you want to spend with your next book.
         </p>
       </div>
 
-      <div className="bg-[#F3ECDA] border border-[#D9CFB0] p-6 sm:p-8">
-        {/* Spines sit on a shelf line; height itself communicates commitment */}
-        <div className="flex items-end justify-between gap-3 sm:gap-5 h-24 border-b-[3px] border-[#1B2A22]/70 px-1">
+      {/* Reading level selector */}
+      <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+
+        <div className="flex items-center justify-between mb-5">
+          <span className="text-sm text-stone-400">
+            Quick escape
+          </span>
+
+          <span className="text-sm text-stone-400">
+            Long journey
+          </span>
+        </div>
+
+        <div className="grid grid-cols-5 gap-2 sm:gap-4">
           {levels.map((item) => {
             const isSelected = comfortLevel === item.level;
 
@@ -59,55 +71,60 @@ function ComfortMeter({ comfortLevel, setComfortLevel }) {
                 type="button"
                 onClick={() => setComfortLevel(item.level)}
                 aria-label={`Reading level ${item.level}: ${item.title}`}
-                aria-pressed={isSelected}
-                className="group flex-1 flex flex-col items-center justify-end h-full focus:outline-none"
+                className={`
+                  group
+                  flex
+                  flex-col
+                  items-center
+                  gap-2
+                  py-3
+                  rounded-2xl
+                  transition-all
+                  duration-200
+                  ${
+                    isSelected
+                      ? 'bg-stone-800 text-white scale-105 shadow-md'
+                      : 'text-stone-400 hover:bg-stone-100 hover:text-stone-600'
+                  }
+                `}
               >
-                <div
-                  className={`
-                    w-full max-w-[34px] transition-all duration-200 border
-                    ${isSelected
-                      ? 'bg-[#C08A32] border-[#1B2A22]/40 shadow-[2px_2px_0_0_rgba(27,42,34,0.2)]'
-                      : 'bg-[#8C8368] border-[#1B2A22]/10 group-hover:bg-[#A6976F]'
-                    }
-                  `}
-                  style={{ height: `${item.spineHeight}px` }}
-                />
+                <span className="text-2xl transition-transform group-hover:scale-110">
+                  📖
+                </span>
+
+                <span className="text-sm font-semibold">
+                  {item.level}
+                </span>
               </button>
             );
           })}
         </div>
 
-        <div className="flex items-center justify-between mt-2 px-1">
-          <span className="font-mono text-[11px] text-[#7C7660]">
-            quick escape
-          </span>
-          <span className="font-mono text-[11px] text-[#7C7660]">
-            long journey
-          </span>
-        </div>
-
-        {/* Selected level, shown as a stamped label */}
-        <div className="mt-6 pt-6 border-t border-[#1B2A22]/10 text-center min-h-[76px]">
+        {/* Selected level information */}
+        <div className="mt-6 pt-6 border-t border-stone-100 text-center min-h-[90px]">
           {selectedLevel ? (
-            <div className="inline-block">
-              <div className="inline-flex items-center gap-2 border-2 border-[#1B2A22]/70 px-3 py-1 -rotate-1 font-mono text-xs uppercase tracking-wider text-[#1B2A22]">
-                Level {selectedLevel.level} — {selectedLevel.title}
-              </div>
-              <p className="text-sm text-[#5B5646] mt-3 font-sans">
+            <>
+              <h3 className="font-bold text-lg text-stone-800 mb-1">
+                {selectedLevel.title}
+              </h3>
+
+              <p className="text-sm text-stone-500">
                 {selectedLevel.description}
               </p>
-            </div>
+            </>
           ) : (
             <>
-              <h3 className="font-serif font-semibold text-[#1B2A22] mb-1">
+              <h3 className="font-semibold text-stone-700 mb-1">
                 Choose your reading level
               </h3>
-              <p className="text-sm text-[#7C7660] font-sans">
-                Select a spine from 1 to 5.
+
+              <p className="text-sm text-stone-400">
+                Select from 1 to 5 to tell us how much you want to read.
               </p>
             </>
           )}
         </div>
+
       </div>
     </div>
   );
