@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 
@@ -17,9 +19,14 @@ def create_app():
     db.init_app(app)
     bcrypt.init_app(app)
 
+    frontend_url = os.getenv(
+        "FRONTEND_URL",
+        "http://localhost:5173"
+    )
+
     CORS(
         app,
-        origins=["http://localhost:5173"],
+        origins=[frontend_url],
         supports_credentials=True
     )
 
