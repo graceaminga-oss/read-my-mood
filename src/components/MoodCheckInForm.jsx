@@ -98,7 +98,8 @@ function MoodCheckInForm({ savedBooks, onCreated }) {
               type="text"
               value={intendedMood}
               onChange={(event) => setIntendedMood(event.target.value)}
-              placeholder="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] placeholder:text-[#8B856F] focus:outline-none focus:border-[#21402F]"
+              placeholder="e.g. Calm"
+              className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] placeholder:text-[#8B856F] focus:outline-none focus:border-[#21402F]"
             />
           </div>
 
