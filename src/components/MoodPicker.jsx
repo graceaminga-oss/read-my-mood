@@ -4,7 +4,7 @@ function MoodPicker({ mood, setMood }) {
       name: 'Cozy',
       icon: '☕',
       description: 'Warm, relaxing, and comforting',
-      color: 'amber',
+      color: '#C08A32',
       selected: 'border-amber-400 bg-amber-50',
       iconBg: 'bg-amber-100',
     },
@@ -12,7 +12,7 @@ function MoodPicker({ mood, setMood }) {
       name: 'Adventurous',
       icon: '🧭',
       description: 'Exciting, bold, and full of discovery',
-      color: 'emerald',
+      color: '#4F765D',
       selected: 'border-emerald-400 bg-emerald-50',
       iconBg: 'bg-emerald-100',
     },
@@ -20,7 +20,7 @@ function MoodPicker({ mood, setMood }) {
       name: 'Heartbroken',
       icon: '💔',
       description: 'Emotional, thoughtful, and comforting',
-      color: 'indigo',
+      color: '#66758A',
       selected: 'border-indigo-400 bg-indigo-50',
       iconBg: 'bg-indigo-100',
     },
@@ -28,7 +28,7 @@ function MoodPicker({ mood, setMood }) {
       name: 'Curious',
       icon: '🔎',
       description: 'Interesting, mysterious, and thought-provoking',
-      color: 'fuchsia',
+      color: '#876B7E',
       selected: 'border-fuchsia-400 bg-fuchsia-50',
       iconBg: 'bg-fuchsia-100',
     },
@@ -74,7 +74,7 @@ function MoodPicker({ mood, setMood }) {
             >
               {/* Selected checkmark */}
               {isSelected && (
-                <span claaName="absolute top-4 right-4 text-sm font-semibold text-[#21402F]">
+                <span className="absolute top-4 right-4 text-sm font-semibold text-[#21402F]">
                   ✓
                 </span>
               )}

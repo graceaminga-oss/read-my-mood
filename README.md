@@ -89,12 +89,7 @@ All protected resources require authentication and are restricted to the logged-
 
 ## Setup
 
-### Frontend
-
-```bash
-npm install
-npm run dev
-```
+This project runs as two separate apps — a React frontend and a Flask backend — each with its own dependencies and its own `.env` file.
 
 ### Backend
 
@@ -103,25 +98,62 @@ cd server
 python -m venv venv
 ```
 
-Windows:
+Activate the virtual environment:
+
+**Windows:**
 
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-Install dependencies:
+**macOS / Linux:**
+
+```bash
+source venv/bin/activate
+```
+
+Install dependencies and run the server:
 
 ```bash
 pip install -r requirements.txt
 python app.py
 ```
 
+The backend runs at `http://localhost:5000` by default.
+
 Create a `.env` file inside `server/`:
 
 ```env
 DATABASE_URL=your_postgresql_database_url
 SECRET_KEY=your_secret_key
+FRONTEND_URL=http://localhost:5173
 ```
+
+`DATABASE_URL` needs a running PostgreSQL database — either install Postgres locally and run `createdb read_my_mood`, or create a free Postgres instance on Render and copy its connection string here.
+
+### Frontend
+
+From the project root:
+
+```bash
+npm install
+```
+
+Create a `.env` file in the project root (same level as `package.json`):
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+Then run:
+
+```bash
+npm run dev
+```
+
+The frontend runs at `http://localhost:5173` by default and expects the backend to already be running.
+
+> **Note:** the frontend reads its API URL from `VITE_API_URL`, so it can point at a local backend during development and at the deployed backend in production without any code changes — only the `.env` value differs between environments.
 
 Do not commit `.env` or `venv/` to GitHub.
 
@@ -158,4 +190,4 @@ Create Mood Check-In
 
 ## Links
 
-**Live App:** <https://read-my-mood-1.onrender.com
+**Live App:** <https://read-my-mood-1.onrender.com>

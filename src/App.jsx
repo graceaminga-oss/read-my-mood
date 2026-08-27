@@ -162,7 +162,7 @@ function App() {
     <main className="max-w-4xl mx-auto space-y-8 sm:space-y-10 lg:space-y-12">
 
       {/* Step 1 */}
-      <section className="bg-[#F3ECDA] border border-[#D9CFB0] px-4 py-6 sm:p-8 lg:p-9 shadow-sm rotate-[-0.3deg] hover:rotate-0 transition-transform duration-300">
+      <section className="bg-[#F3ECDA] border border-[#D9CFB0] px-4 py-6 sm:p-8 lg:p-9 shadow-sm">
         <MoodPicker
           mood={mood}
           setMood={setMood}
@@ -170,7 +170,7 @@ function App() {
       </section>
 
       {/* Step 2 */}
-      <section className="bg-[#F3ECDA] border border-[#D9CFB0] px-4 py-6 sm:p-8 lg:p-9 shadow-sm rotate-[0.3deg] hover:rotate-0 transition-transform duration-300">
+      <section className="bg-[#F3ECDA] border border-[#D9CFB0] px-4 py-6 sm:p-8 lg:p-9 shadow-sm">
         <ComfortMeter
           comfortLevel={comfortLevel}
           setComfortLevel={setComfortLevel}

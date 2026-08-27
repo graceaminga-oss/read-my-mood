@@ -1,4 +1,5 @@
-const API_BASE_URL = 'https://read-my-mood.onrender.com/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || 'https://read-my-mood.onrender.com/api';
 
 async function request(endpoint, options = {}) {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
