@@ -36,17 +36,17 @@ function MoodPicker({ mood, setMood }) {
 
   return (
     <div>
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-stone-800 mb-2">
+      <div className="mb-6 sm:mb-8">
+        <h2 className="font-['Fraunces'] text-2xl sm:text-3xl font-semibold text-[#1B2A22] mb-2">
           Pick Your Mood
         </h2>
 
-        <p className="text-stone-500">
+        <p className="font-['Public_Sans'] text-sm sm:text-base text-[#5B5646] leading-6">
           Choose the mood that best describes how you feel right now.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         {moods.map((item) => {
           const isSelected = mood === item.name;
 
@@ -58,26 +58,23 @@ function MoodPicker({ mood, setMood }) {
               className={`
                 relative
                 text-left
-                p-5
-                rounded-2xl
-                border-2
-                transition-all
+                p-4 sm:p-5
+                border
+                transition-colors
                 duration-200
-                hover:-translate-y-1
-                hover:shadow-md
                 focus:outline-none
                 focus:ring-2
-                focus:ring-stone-400
+                focus:ring-[#21402F]/30
                 ${
                   isSelected
                     ? item.selected
-                    : 'border-stone-200 bg-white hover:border-stone-300'
+                    : 'border-[#D9CFB0] bg-[#FFFDF5] hover:border-[#B0A67F] hover:bg-[#F8F3E5]'
                 }
               `}
             >
               {/* Selected checkmark */}
               {isSelected && (
-                <span className="absolute top-4 right-4 text-sm font-bold">
+                <span claaName="absolute top-4 right-4 text-sm font-semibold text-[#21402F]">
                   ✓
                 </span>
               )}
@@ -85,24 +82,25 @@ function MoodPicker({ mood, setMood }) {
               {/* Mood icon */}
               <div
                 className={`
-                  w-12 h-12
-                  rounded-xl
+                  w-11 h-11 sm:w-12 sm:h-12
                   flex items-center justify-center
-                  text-2xl
+                  text-xl sm:text-2xl
                   mb-4
-                  ${isSelected ? item.iconBg : 'bg-stone-100'}
+                  ${isSelected ? item.iconBg :
+                    'bg-[#EDE8D9]'
+                  }
                 `}
               >
                 {item.icon}
               </div>
 
               {/* Mood name */}
-              <h3 className="text-lg font-bold text-stone-800 mb-1">
+              <h3 className="font-['Fraunces'] text-lg sm:text-xl font-semibold text-[#1B2A22] mb-1">
                 {item.name}
               </h3>
 
               {/* Mood description */}
-              <p className="text-sm text-stone-500 leading-relaxed">
+              <p className="font-['Public_Sans'] text-sm text-[#5B5646] leading-6 pr-5">
                 {item.description}
               </p>
             </button>

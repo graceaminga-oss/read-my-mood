@@ -101,8 +101,8 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
 
   if (loading) {
     return (
-      <section className="text-center py-12">
-        <p className="text-stone-500">
+      <section className="text-center py-10 sm:py-12">
+        <p className="font-['Public_Sans'] text-sm text-[#C9D6C6]">
           Loading your mood check-ins...
         </p>
       </section>
@@ -110,61 +110,61 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
   }
 
   return (
-    <section className="mt-16">
-      <div className="mb-7">
-        <p className="text-sm font-semibold text-stone-400 uppercase tracking-wider">
+    <section className="max-w-6xl mx-auto mt-14 sm:mt-16 lg:mt-20 px-4 sm:px-6 lg:px-8">
+      <div className="mb-7 sm:mb-9">
+        <p className="font-['Courier_Prime'] text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#B8D9C4]">
           Your reflections
         </p>
 
-        <h2 className="text-3xl font-bold mt-1">
+        <h2 className="font-['Fraunces'] text-3xl sm:text-4xl font-semibold text-[#F3ECDA] mt-2">
           Mood Check-ins
         </h2>
 
-        <p className="text-stone-500 mt-2">
+        <p className="font-['Public_Sans'] text-sm sm:text-base text-[#C9D6C6] mt-2 max-w-xl leading-6">
           Look back at how your reading made you feel.
         </p>
       </div>
 
       {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 rounded-2xl p-4">
-          <p className="text-sm text-red-700">
+        <div className="mb-6 border border-[#8C4A3A] bg-[#3A2420] px-4 py-3">
+          <p className="font-['Public_Sans'] text-sm text-[#F0C9BC]">
             {error}
           </p>
         </div>
       )}
 
       {checkins.length === 0 ? (
-        <div className="bg-white border border-stone-200 rounded-3xl p-10 text-center">
-          <h3 className="text-xl font-semibold mb-2">
+        <div className="bg-[#F3ECDA] border border-[#D9CFB0] px-5 py-10 sm:p-12 text-center">
+          <h3 className="font-['Fraunces'] text-xl sm:text-2xl font-semibold text-[#1B2A22] mb-2">
             No check-ins yet
           </h3>
 
-          <p className="text-stone-500">
+          <p className="font-['Public_Sans'] text-sm sm:text-base text-[#5B5646] leading-6">
             Your reading reflections will appear here.
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 sm:space-y-5">
           {checkins.map((checkin) => (
             <article
               key={checkin.id}
-              className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm"
+              className="bg-[#F3ECDA] border border-[#D9CFB0] px-5 py-6 sm:p-7 shadow-sm"
             >
               {editingId === checkin.id ? (
                 <>
-                  <div className="mb-5">
-                    <p className="text-sm text-stone-400">
+                  <div className="mb-6">
+                    <p className="font-['Courier_Prime'] text-[11px] uppercase tracking-wide text-[#7C7660]">
                       Editing check-in
                     </p>
 
-                    <h3 className="text-xl font-semibold text-stone-800 mt-1">
+                    <h3 className="font-['Fraunces'] text-xl sm:text-2xl font-semibold text-[#1B2A22] mt-1">
                       {getBookTitle(checkin.saved_book_id)}
                     </h3>
                   </div>
 
-                  <div className="grid sm:grid-cols-2 gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm font-medium text-stone-700 mb-2">
+                      <label className="block font-['Public_Sans'] text-sm font-semibold text-[#1B2A22] mb-2">
                         Intended mood
                       </label>
 
@@ -174,12 +174,12 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
                         onChange={(event) =>
                           setIntendedMood(event.target.value)
                         }
-                        className="w-full rounded-xl border border-stone-300 px-4 py-3"
+                        className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] focus:outline-none focus:border-[#21402F]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-stone-700 mb-2">
+                      <label className="block font-['Public_Sans'] text-sm font-semibold text-[#1B2A22] mb-2">
                         Actual mood
                       </label>
 
@@ -190,13 +190,13 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
                           setActualMood(event.target.value)
                         }
                         required
-                        className="w-full rounded-xl border border-stone-300 px-4 py-3"
+                        className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] focus:outline-none focus:border-[#21402F]"
                       />
                     </div>
                   </div>
 
                   <div className="mt-5">
-                    <label className="block text-sm font-medium text-stone-700 mb-2">
+                    <label className="block font-['Public_Sans'] text-sm font-semibold text-[#1B2A22] mb-2">
                       Reflection
                     </label>
 
@@ -206,16 +206,16 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
                         setReflection(event.target.value)
                       }
                       rows={4}
-                      className="w-full rounded-xl border border-stone-300 px-4 py-3 resize-none"
+                      className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] resize-none focus:outline-none focus:border-[#21402F]"
                     />
                   </div>
 
-                  <div className="flex gap-3 mt-5">
+                  <div className="flex flex-col sm:flex-row gap-3 mt-6">
                     <button
                       type="button"
                       onClick={() => handleUpdate(checkin.id)}
                       disabled={saving || !actualMood.trim()}
-                      className="rounded-xl bg-stone-800 text-white px-5 py-2.5 font-semibold hover:bg-stone-700 disabled:opacity-50 transition"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-[#21402F] text-[#F3ECDA] font-['Courier_Prime'] text-xs uppercase tracking-wide hover:bg-[#162E21] disabled:opacity-50 transition-colors duration-200"
                     >
                       {saving ? 'Saving...' : 'Save Changes'}
                     </button>
@@ -224,7 +224,7 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
                       type="button"
                       onClick={cancelEditing}
                       disabled={saving}
-                      className="rounded-xl border border-stone-300 px-5 py-2.5 font-semibold text-stone-700 hover:bg-stone-50 transition"
+                      className="w-full sm:w-auto px-5 py-2.5 border border-[#B0A67F] text-[#1B2A22] font-['Courier_Prime'] text-xs uppercase tracking-wide hover:bg-[#E9E2CE] transition-colors duration-200"
                     >
                       Cancel
                     </button>
@@ -234,11 +234,11 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
                 <>
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div>
-                      <p className="text-sm text-stone-400">
+                      <p className="font-['Courier_Prime'] text-[11px] uppercase tracking-wide text-[#7C7660]">
                         Check-in
                       </p>
 
-                      <h3 className="text-xl font-semibold text-stone-800 mt-1">
+                      <h3 className="font-['Fraunces'] text-xl sm:text-2xl font-semibold text-[#1B2A22] mt-1">
                         {checkin.actual_mood}
                       </h3>
                     </div>
@@ -247,7 +247,7 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
                       <button
                         type="button"
                         onClick={() => startEditing(checkin)}
-                        className="text-sm font-semibold text-stone-700 hover:text-stone-900"
+                        className="font-['Courier_Prime'] text-xs uppercase tracking-wide text-[#21402F] underline underline-offset-4 hover:no-underline"
                       >
                         Edit
                       </button>
@@ -255,23 +255,23 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
                       <button
                         type="button"
                         onClick={() => handleDelete(checkin.id)}
-                        className="text-sm font-semibold text-red-600 hover:text-red-800"
+                        className="font-['Courier_Prime'] text-xs uppercase tracking-wide text-[#8C4A3A] underline underline-offset-4 hover:no-underline"
                       >
                         Delete
                       </button>
                     </div>
                   </div>
 
-                  <div className="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
-                    <p className="text-stone-600">
-                      <span className="font-medium">
+                  <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <p className="font-['Public_Sans'] text-[#5B5646] leading-6">
+                      <span className="font-semibold text-[#1B2A22]">
                         Intended mood:
                       </span>{' '}
                       {checkin.intended_mood || 'Not specified'}
                     </p>
 
-                    <p className="text-stone-600">
-                      <span className="font-medium">
+                    <p className="font-['Public_Sans'] text-[#5B5646] leading-6">
+                      <span className="font-semibold text-[#1B2A22]">
                         Saved book:
                       </span>{' '}
                       {getBookTitle(checkin.saved_book_id)}
@@ -279,18 +279,18 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
                   </div>
 
                   {checkin.reflection && (
-                    <div className="mt-4 bg-stone-50 rounded-xl p-4">
-                      <p className="text-sm font-medium text-stone-700 mb-1">
+                    <div className="mt-5 border-l-2 border-[#C08A32] bg-[#EDE7D5] px-4 py-4">
+                      <p className="font-['Courier_Prime'] text-[11px] uppercase tracking-wide text-[#7C7660] mb-1">
                         Reflection
                       </p>
 
-                      <p className="text-stone-600">
+                      <p className="font-['Public_Sans'] text-sm sm:text-base text-[#5B5646] leading-6">
                         {checkin.reflection}
                       </p>
                     </div>
                   )}
 
-                  <p className="text-xs text-stone-400 mt-4">
+                  <p className="font-['Courier_Prime'] text-[11px] text-[#7C7660] mt-5">
                     {new Date(checkin.created_at).toLocaleDateString()}
                   </p>
                 </>

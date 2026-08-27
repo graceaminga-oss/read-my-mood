@@ -40,19 +40,19 @@ function AuthForm({ onLogin }) {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 flex items-center justify-center px-6 py-12">
+    <div className="min-h-screen bg-[#21402F] flex items-center justify-center px-4 sm:px-6 py-10 sm:py-12">
       <div className="w-full max-w-md">
 
         <div className="text-center mb-8">
-          <p className="text-sm uppercase tracking-[0.2em] text-stone-500 mb-3">
+          <p className="font-['Courier_Prime'] text-[11px] sm:text-xs uppercase tracking-[0.25em] text-[#B8D9C4] mb-3">
             Welcome to
           </p>
 
-          <h1 className="text-4xl font-bold text-stone-800">
+          <h1 className="font-['Fraunces'] text-4xl sm:text-5xl font-semibold text-[#F3ECDA] leading-tight">
             Read My Mood
           </h1>
 
-          <p className="text-stone-500 mt-3">
+          <p className="font-['Public_Sans'] text-sm sm:text-base text-[#C9D6C6] mt-3 leading-6 px-2">
             {mode === 'login'
               ? 'Sign in to continue your reading journey.'
               : 'Create an account and start building your reading shelf.'}
@@ -61,15 +61,15 @@ function AuthForm({ onLogin }) {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white border border-stone-200 rounded-3xl p-8 shadow-sm"
+          className="bg-[#F3ECDA] border border-[#D9CFB0] px-5 py-7 sm:p-8"
         >
-          <h2 className="text-2xl font-bold text-stone-800 mb-6">
+          <h2 className="font-['Fraunces'] text-2xl sm:text-3xl font-semibold text-[#1B2A22] mb-6">
             {mode === 'login' ? 'Sign in' : 'Create account'}
           </h2>
 
           {mode === 'signup' && (
             <div className="mb-5">
-              <label className="block text-sm font-medium text-stone-700 mb-2">
+              <label className="block font-['Public_Sans'] text-sm font-semibold text-[#1B2A22] mb-2">
                 Name
               </label>
 
@@ -79,13 +79,13 @@ function AuthForm({ onLogin }) {
                 onChange={(event) => setName(event.target.value)}
                 placeholder="Your name"
                 required
-                className="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none focus:ring-2 focus:ring-stone-400"
+                className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] placeholder:text-[#8B856F] outline-none focus:border-[#21402F]"
               />
             </div>
           )}
 
           <div className="mb-5">
-            <label className="block text-sm font-medium text-stone-700 mb-2">
+            <label className="block font-['Public_Sans'] text-sm font-semibold text-[#1B2A22] mb-2">
               Email
             </label>
 
@@ -95,12 +95,12 @@ function AuthForm({ onLogin }) {
               onChange={(event) => setEmail(event.target.value)}
               placeholder="you@example.com"
               required
-              className="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none focus:ring-2 focus:ring-stone-400"
+              className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] placeholder:text-[#8B856F] outline-none focus:border-[#21402F]"
             />
           </div>
 
           <div className="mb-5">
-            <label className="block text-sm font-medium text-stone-700 mb-2">
+            <label className="block font-['Public_Sans'] text-sm font-semibold text-[#1B2A22] mb-2">
               Password
             </label>
 
@@ -111,12 +111,13 @@ function AuthForm({ onLogin }) {
               placeholder="At least 8 characters"
               required
               minLength={8}
-              className="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none focus:ring-2 focus:ring-stone-400"
+              className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] placeholder:text-[#8B856F] outline-none focus:border-[#21402F]"
             />
           </div>
 
           {error && (
-            <div className="mb-5 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+            <div className="mb-5 border border-[#8C4A3A] bg-[#3A2420] px-4 py-3">
+              <p className="font-['Public_Sans'] text-sm text-[#F0C9BC] leading-5"></p>
               {error}
             </div>
           )}
@@ -124,7 +125,7 @@ function AuthForm({ onLogin }) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-stone-800 text-white py-3 font-semibold hover:bg-stone-700 disabled:opacity-50 transition"
+            className="w-full bg-[#21402F] text-[#F3ECDA] py-3.5 px-4 font-['Courier_Prime'] text-xs sm:text-sm uppercase tracking-wide hover:bg-[#162E21] disabled:opacity-50 transition-colors duration-200"
           >
             {loading
               ? 'Please wait...'
@@ -137,7 +138,7 @@ function AuthForm({ onLogin }) {
             <button
               type="button"
               onClick={switchMode}
-              className="text-sm text-stone-600 underline hover:text-stone-900"
+              className="font-['Public_Sans'] text-sm text-[#5B5646] underline underline-offset-4 hover:text-[#21402F]"
             >
               {mode === 'login'
                 ? "Don't have an account? Sign up"

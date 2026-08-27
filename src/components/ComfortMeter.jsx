@@ -34,34 +34,34 @@ function ComfortMeter({ comfortLevel, setComfortLevel }) {
   return (
     <div>
       {/* Heading */}
-      <div className="mb-6">
-        <p className="text-sm font-semibold text-stone-400 uppercase tracking-wider mb-2">
+      <div className="mb-6 sm:mb-8">
+        <p className="font-['Courier_Prime'] text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#7C7660] mb-2">
           Reading time
         </p>
 
-        <h2 className="text-2xl font-bold text-stone-800 mb-2">
+        <h2 className="font-['Fraunces'] text-2xl sm:text-3xl font-semibold text-[#1B2A22] mb-2 leading-tight">
           How much do you want to read?
         </h2>
 
-        <p className="text-stone-500">
+        <p className="font-['Public_Sans'] text-sm sm:text-base text-[#5B5646] leading-6">
           Choose how much time you want to spend with your next book.
         </p>
       </div>
 
       {/* Reading level selector */}
-      <div className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+      <div className="bg-[#FFFDF5] border border-[#D9CFB0] px-4 py-6 sm:p-7">
 
         <div className="flex items-center justify-between mb-5">
-          <span className="text-sm text-stone-400">
+          <span className="font-['Courier_Prime'] text-[11px] sm:text-xs uppercase tracking-wide text-[#7C7660]">
             Quick escape
           </span>
 
-          <span className="text-sm text-stone-400">
+          <span className="font-['Courier_Prime'] text-[11px] sm:text-xs uppercase tracking-wide text-[#7C7660]">
             Long journey
           </span>
         </div>
 
-        <div className="grid grid-cols-5 gap-2 sm:gap-4">
+        <div className="grid grid-cols-5 gap-1.5 sm:gap-3">
           {levels.map((item) => {
             const isSelected = comfortLevel === item.level;
 
@@ -76,23 +76,24 @@ function ComfortMeter({ comfortLevel, setComfortLevel }) {
                   flex
                   flex-col
                   items-center
-                  gap-2
+                  gap-1.5
                   py-3
-                  rounded-2xl
-                  transition-all
+                  sm:py-4
+                  border
+                  transition-colors
                   duration-200
                   ${
                     isSelected
-                      ? 'bg-stone-800 text-white scale-105 shadow-md'
-                      : 'text-stone-400 hover:bg-stone-100 hover:text-stone-600'
+                      ? 'bg-[#21402F] border-[#21402F] text-[#F3ECDA]'
+                      : 'bg-[#F3ECDA] border-[#D9CFB0] text-[#7C7660] hover:border-[#B0A67F] hover:text-[#21402F]'
                   }
                 `}
               >
-                <span className="text-2xl transition-transform group-hover:scale-110">
+                <span className="text-xl sm:text-2xl">
                   📖
                 </span>
 
-                <span className="text-sm font-semibold">
+                <span className="font-['Courier_Prime'] text-xs sm:text-sm font-semibold">
                   {item.level}
                 </span>
               </button>
@@ -101,24 +102,24 @@ function ComfortMeter({ comfortLevel, setComfortLevel }) {
         </div>
 
         {/* Selected level information */}
-        <div className="mt-6 pt-6 border-t border-stone-100 text-center min-h-[90px]">
+        <div className="mt-6 pt-6 border-t border-[#D9CFB0] text-center min-h-[90px]">
           {selectedLevel ? (
             <>
-              <h3 className="font-bold text-lg text-stone-800 mb-1">
+              <h3 className="font-['Fraunces'] text-lg sm:text-xl font-semibold text-[#1B2A22] mb-1">
                 {selectedLevel.title}
               </h3>
 
-              <p className="text-sm text-stone-500">
+              <p className="font-['Public_Sans'] text-sm text-[#5B5646] leading-6 max-w-lg mx-auto">
                 {selectedLevel.description}
               </p>
             </>
           ) : (
             <>
-              <h3 className="font-semibold text-stone-700 mb-1">
+              <h3 className="font-['Fraunces'] text-lg sm:text-xl font-semibold text-[#1B2A22] mb-1">
                 Choose your reading level
               </h3>
 
-              <p className="text-sm text-stone-400">
+              <p className="font-['Public_Sans'] text-sm text-[#7C7660] leading-6 max-w-lg mx-auto">
                 Select from 1 to 5 to tell us how much you want to read.
               </p>
             </>

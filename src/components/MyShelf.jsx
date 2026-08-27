@@ -57,8 +57,8 @@ function MyShelf({ savedBooks, setSavedBooks }) {
 
   if (loading) {
     return (
-      <section className="text-center py-12">
-        <p className="text-stone-500">
+      <section className="text-center py-10 sm:py-12">
+        <p className="font-['Public_Sans'] text-sm text-[#C9D6C6]">
           Loading your shelf...
         </p>
       </section>
@@ -66,45 +66,45 @@ function MyShelf({ savedBooks, setSavedBooks }) {
   }
 
   return (
-    <section className="mt-16">
-      <div className="mb-7">
-        <p className="text-sm font-semibold text-stone-400 uppercase tracking-wider">
+    <section className="max-w-6xl mx-auto mt-14 sm:mt-16 lg:mt-20 px-4 sm:px-6 lg:px-8">
+      <div className="mb-7 sm:mb-9">
+        <p className="font-['Courier_Prime'] text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#B8D9C4]">
           Your collection
         </p>
 
-        <h2 className="text-3xl font-bold mt-1">
+        <h2 className="font-['Fraunces'] text-3xl sm:text-4xl font-semibold text-[#F3ECDA] mt-2">
           My Reading Shelf
         </h2>
 
-        <p className="text-stone-500 mt-2">
+        <p className="font-['Public_Sans'] text-sm sm:text-base text-[#C9D6C6] mt-2 max-w-xl leading-6">
           Books you've saved for your reading journey.
         </p>
       </div>
 
       {error && (
-        <div className="mb-6 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+        <div className="mb-6 border border-[#8C4A3A] bg-[#3A2420] px-4 py-3 text-sm text-[#F0C9BC]">
           {error}
         </div>
       )}
 
       {savedBooks.length === 0 ? (
-        <div className="bg-white border border-stone-200 rounded-3xl p-10 text-center">
-          <h3 className="text-xl font-semibold mb-2">
+        <div className="bg-[#F3ECDA] border border-[#D9CFB0] px-5 py-10 sm:p-12 text-center">
+          <h3 className="font-['Fraunces'] text-xl sm:text-2xl font-semibold text-[#1B2A22] mb-2">
             Your shelf is empty
           </h3>
 
-          <p className="text-stone-500">
+          <p className="font-['Public_Sans'] text-sm sm:text-base text-[#5B5646] max-w-md mx-auto leading-6">
             Find a book that matches your mood and save it here.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
           {savedBooks.map((savedBook) => (
             <article
               key={savedBook.id}
-              className="bg-white border border-stone-200 rounded-2xl p-3 shadow-sm"
+              className="bg-[#F3ECDA] border border-[#D9CFB0] p-3 sm:p-4 shadow-sm"
             >
-              <div className="overflow-hidden rounded-xl bg-stone-100">
+              <div className="overflow-hidden bg-[#E5DDC6]">
                 {savedBook.book.cover_url ? (
                   <img
                     src={savedBook.book.cover_url}
@@ -112,12 +112,12 @@ function MyShelf({ savedBooks, setSavedBooks }) {
                     className="w-full aspect-[2/3] object-cover"
                   />
                 ) : (
-                  <div className="w-full aspect-[2/3] flex flex-col items-center justify-center p-6 text-center">
-                    <span className="text-4xl mb-3">
+                  <div className="w-full aspect-[2/3] flex flex-col items-center justify-center p-4 sm:p-6 text-center">
+                    <span className="text-3xl sm:text-4xl mb-3">
                       📖
                     </span>
 
-                    <p className="text-sm text-stone-500">
+                    <p className="font-['Public_Sans'] text-xs sm:text-sm text-[#7C7660]">
                       Cover unavailable
                     </p>
                   </div>
@@ -125,24 +125,24 @@ function MyShelf({ savedBooks, setSavedBooks }) {
               </div>
 
               <div className="pt-4 px-1">
-                <h3 className="font-semibold text-stone-800 leading-snug">
+                <h3 className="font-['Fraunces'] text-base sm:text-lg font-semibold text-[#1B2A22] leading-snug">
                   {savedBook.book.title}
                 </h3>
 
-                <p className="text-sm text-stone-500 mt-1">
+                <p className="font-['Public_Sans'] text-sm text-[#5B5646] mt-1">
                   {savedBook.book.author}
                 </p>
 
-                <div className="mt-3 space-y-1 text-sm text-stone-600">
+                <div className="mt-3 space-y-1.5 text-xs sm:text-sm text-[#5B5646] font-['Public_Sans']">
                   <p>
-                    <span className="font-medium">
+                    <span className="font-semibold text-[#1B2A22]">
                       Mood:
                     </span>{' '}
                     {savedBook.mood || 'Not specified'}
                   </p>
 
                   <p>
-                    <span className="font-medium">
+                    <span className="font-semibold text-[#1B2A22]">
                       Comfort:
                     </span>{' '}
                     {savedBook.comfort_level || 'Not specified'}
@@ -150,7 +150,7 @@ function MyShelf({ savedBooks, setSavedBooks }) {
                 </div>
 
                 <div className="mt-4">
-                  <label className="block text-xs font-medium text-stone-500 mb-1">
+                  <label className="block font-['Courier_Prime'] text-[11px] uppercase tracking-wide text-[#7C7660] mb-1.5">
                     Reading status
                   </label>
 
@@ -162,7 +162,7 @@ function MyShelf({ savedBooks, setSavedBooks }) {
                         event.target.value
                       )
                     }
-                    className="w-full rounded-xl border border-stone-300 px-3 py-2 text-sm bg-white"
+                    className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-3 py-2.5 text-xs sm:text-sm text-[#1B2A22] focus:outline-none focus:border-[#21402F]"
                   >
                     <option value="Want to Read">
                       Want to Read
@@ -181,7 +181,7 @@ function MyShelf({ savedBooks, setSavedBooks }) {
                 <button
                   type="button"
                   onClick={() => handleDelete(savedBook.id)}
-                  className="w-full mt-3 rounded-xl border border-red-200 text-red-600 py-2 text-sm font-semibold hover:bg-red-50 transition"
+                  className="w-full mt-3 border border-[#8C4A3A] text-[#8C4A3A] py-2.5 text-xs sm:text-sm font-['Courier_Prime'] uppercase tracking-wide hover:bg-[#8C4A3A] hover:text-[#F3ECDA] transition-colors duration-200"
                 >
                   Remove
                 </button>

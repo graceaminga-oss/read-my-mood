@@ -38,33 +38,34 @@ function MoodCheckInForm({ savedBooks, onCreated }) {
   }
 
   return (
-    <section className="mt-16">
-      <div className="mb-7">
-        <p className="text-sm font-semibold text-stone-400 uppercase tracking-wider">
+    <section className="max-w-6xl mx-auto mt-14 sm:mt-16 lg:mt-20 px-4 sm:px-6 lg:px-8">
+      <div className="mb-7 sm:mb-9">
+        <p className="font-['Courier_Prime'] text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#B8D9C4]">
           Reflect
         </p>
 
-        <h2 className="text-3xl font-bold mt-1">
+        <h2 className="font-['Fraunces'] text-3xl sm:text-4xl font-semibold text-[#F3ECDA] mt-2 max-w-2xl leading-tight">
           How did your book make you feel?
         </h2>
 
-        <p className="text-stone-500 mt-2">
+        <p className="font-['Public_Sans'] text-sm sm:text-base text-[#C9D6C6] mt-2 leading-6">
           Record your mood after reading.
         </p>
       </div>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white border border-stone-200 rounded-3xl p-6 sm:p-8 shadow-sm"
+        className="bg-[#F3ECDA] border border-[#D9CFB0] px-5 py-6 sm:p-8 lg:p-9 shadow-sm"
       >
         {error && (
-          <div className="mb-5 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          <div className="mb-6 border border-[#8C4A3A] bg-[#3A2420] px-4 py-3">
+            <p className="font-['Public_Sans'] text-sm text-[#F0C9BC]"></p>
             {error}
           </div>
         )}
 
         <div className="mb-5">
-          <label className="block text-sm font-medium text-stone-700 mb-2">
+          <label className="block font-['Public_Sans'] text-sm font-semibold text-[#1B2A22] mb-2">
             Book
           </label>
 
@@ -72,7 +73,7 @@ function MoodCheckInForm({ savedBooks, onCreated }) {
             value={savedBookId}
             onChange={(event) => setSavedBookId(event.target.value)}
             required
-            className="w-full rounded-xl border border-stone-300 px-4 py-3 bg-white"
+            className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] focus:outline-none focus:border-[#21402F]"
           >
             <option value="">Choose a saved book</option>
 
@@ -87,9 +88,9 @@ function MoodCheckInForm({ savedBooks, onCreated }) {
           </select>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label className="block text-sm font-medium text-stone-700 mb-2">
+            <label className="block font-['Public_Sans'] text-sm font-semibold text-[#1B2A22] mb-2">
               Intended mood
             </label>
 
@@ -97,13 +98,12 @@ function MoodCheckInForm({ savedBooks, onCreated }) {
               type="text"
               value={intendedMood}
               onChange={(event) => setIntendedMood(event.target.value)}
-              placeholder="e.g. Relaxed"
-              className="w-full rounded-xl border border-stone-300 px-4 py-3"
+              placeholder="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] placeholder:text-[#8B856F] focus:outline-none focus:border-[#21402F]"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-stone-700 mb-2">
+            <label className="block font-['Public_Sans'] text-sm font-semibold text-[#1B2A22] mb-2">
               Actual mood
             </label>
 
@@ -113,13 +113,13 @@ function MoodCheckInForm({ savedBooks, onCreated }) {
               onChange={(event) => setActualMood(event.target.value)}
               placeholder="e.g. Happy"
               required
-              className="w-full rounded-xl border border-stone-300 px-4 py-3"
+              className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] placeholder:text-[#8B856F] focus:outline-none focus:border-[#21402F]"
             />
           </div>
         </div>
 
         <div className="mt-5">
-          <label className="block text-sm font-medium text-stone-700 mb-2">
+          <label className="block font-['Public_Sans'] text-sm font-semibold text-[#1B2A22] mb-2">
             Reflection
           </label>
 
@@ -128,14 +128,14 @@ function MoodCheckInForm({ savedBooks, onCreated }) {
             onChange={(event) => setReflection(event.target.value)}
             placeholder="How did the book affect your mood?"
             rows={4}
-            className="w-full rounded-xl border border-stone-300 px-4 py-3 resize-none"
+            className="w-full border border-[#B0A67F] bg-[#FFFDF5] px-4 py-3 text-sm text-[#1B2A22] placeholder:text-[#8B856F] resize-none focus:outline-none focus:border-[#21402F]"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading || savedBooks.length === 0}
-          className="w-full mt-6 rounded-xl bg-stone-800 text-white py-3 font-semibold hover:bg-stone-700 disabled:opacity-50 transition"
+          className="w-full mt-6 bg-[#21402F] text-[#F3ECDA] py-3.5 px-5 font-['Courier_Prime'] text-xs sm:text-sm uppercase tracking-wide hover:bg-[#162E21] disabled:opacity-50 transition-colors duration-200"
         >
           {loading ? 'Saving...' : 'Save Check-in'}
         </button>
