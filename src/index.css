@@ -46,18 +46,26 @@ button:focus-visible {
   z-index: 9999;
   opacity: 1;
   transition: opacity 0.5s ease;
+  overflow: hidden;
 }
 
 .loading-gif {
-  width: 180px;
-  height: 180px;
-  object-fit: contain;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
 }
 
 #loading-screen p {
-  margin-top: 15px;
-  font-size: 18px;
+  position: absolute;
+  bottom: 10%;
+  margin: 0;
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: 500;
   color: #B8D9C4;
+  background: rgba(33, 64, 47, 0.75);
+  border-radius: 10px;
+  z-index: 2;
 }
 
 #loading-screen.hidden {
