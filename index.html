@@ -13,7 +13,30 @@
   </head>
 
   <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+      <img
+        src="/van3ssa-coffee-cup-7240.gif"
+        alt="Loading Read My Mood"
+        class="loading-gif"
+      />
+      <p>Reading your mood...</p>
+    </div>
+
     <div id="root"></div>
+
     <script type="module" src="/src/main.jsx"></script>
+
+    <script>
+      window.addEventListener("load", function () {
+        const loadingScreen = document.getElementById("loading-screen");
+
+        loadingScreen.classList.add("hidden");
+
+        setTimeout(() => {
+          loadingScreen.style.display = "none";
+        }, 500);
+      });
+    </script>
   </body>
 </html>

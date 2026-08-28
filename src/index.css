@@ -29,3 +29,38 @@ button:focus-visible {
   background-color: #B8D9C4;
   color: #1B2A22;
 }
+
+
+/* =========================
+   Loading Screen
+   ========================= */
+
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  background-color: #21402F;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.loading-gif {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+}
+
+#loading-screen p {
+  margin-top: 15px;
+  font-size: 18px;
+  color: #B8D9C4;
+}
+
+#loading-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
