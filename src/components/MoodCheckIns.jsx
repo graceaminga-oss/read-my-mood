@@ -110,21 +110,7 @@ function MoodCheckIns({ refreshKey, savedBooks = [] }) {
   }
 
   return (
-    <section className="max-w-6xl mx-auto mt-14 sm:mt-16 lg:mt-20 px-4 sm:px-6 lg:px-8">
-      <div className="mb-7 sm:mb-9">
-        <p className="font-['Courier_Prime'] text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#B8D9C4]">
-          Your reflections
-        </p>
-
-        <h2 className="font-['Fraunces'] text-3xl sm:text-4xl font-semibold text-[#F3ECDA] mt-2">
-          Mood Check-ins
-        </h2>
-
-        <p className="font-['Public_Sans'] text-sm sm:text-base text-[#C9D6C6] mt-2 max-w-xl leading-6">
-          Look back at how your reading made you feel.
-        </p>
-      </div>
-
+    <section>
       {error && (
         <div className="mb-6 border border-[#8C4A3A] bg-[#3A2420] px-4 py-3">
           <p className="font-['Public_Sans'] text-sm text-[#F0C9BC]">
