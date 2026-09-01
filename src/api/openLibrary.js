@@ -1,9 +1,12 @@
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || 'https://read-my-mood.onrender.com/api';
+
 function getSearchTermForMood(mood) {
   const moodToSearchTerm = {
-    Cozy: 'cozy fiction',
-    Adventurous: 'adventure fiction',
-    Heartbroken: 'romance heartbreak',
-    Curious: 'mystery fiction',
+    Cozy: 'holidays',
+    Adventurous: 'adventure',
+    Heartbroken: 'heartbreak',
+    Curious: 'mystery',
   };
 
   return moodToSearchTerm[mood] || 'fiction';
@@ -13,7 +16,7 @@ export async function searchBooks(mood) {
   const searchTerm = getSearchTermForMood(mood);
 
   const response = await fetch(
-    `/api/saved-books/search?mood=${encodeURIComponent(searchTerm)}`,
+    `${API_BASE_URL}/saved-books/search?mood=${encodeURIComponent(searchTerm)}`,
     {
       credentials: 'include',
     }
