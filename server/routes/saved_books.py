@@ -1,3 +1,5 @@
+import requests
+
 from flask import Blueprint, jsonify, request, session
 
 from extensions import db
@@ -10,6 +12,53 @@ saved_books_bp = Blueprint(
     __name__,
     url_prefix="/api/saved-books"
 )
+
+@saved_books_bp.get("/search")
+def search_books():
+    search_term = request.args.get("mood", "").strip()
+
+    if not search_term:
+        search_term = "fiction"
+
+    url = "https://openlibrary.org/search.json"
+
+    params = {
+        "subject": search_term,
+        "limit": 40,
+        "fields": "key,title,author_name,cover_i",
+    }
+
+    try:
+        response = requests.get(
+            url,
+            params=params,
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+
+    except requests.RequestException:
+        return jsonify({
+            "error": "Unable to connect to the book library."
+        }), 502
+
+    books = [
+        {
+            "key": book.get("key"),
+            "title": book.get("title"),
+            "cover_id": book.get("cover_i"),
+            "authors": [
+                {"name": name}
+                for name in book.get("author_name", [])
+            ],
+        }
+        for book in data.get("docs", [])
+        if book.get("title") and book.get("cover_i")
+    ]
+
+    return jsonify({
+        "works": books
+    }), 200
 
 
 @saved_books_bp.post("")
